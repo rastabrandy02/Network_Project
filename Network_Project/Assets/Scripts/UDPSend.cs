@@ -12,8 +12,8 @@ public class UDPSend : MonoBehaviour
     private static int localPort;
 
    
-    private string myIP;  // define in init
-    public int port;  // define in init
+    public string myIP = "127.0.0.1";
+    public int port = 0;
 
     
     IPEndPoint remoteEndPoint;
@@ -32,32 +32,26 @@ public class UDPSend : MonoBehaviour
 
     public void Init()
     {       
-
-        myIP = "127.0.0.1";
-        port = 8051;
-
-        
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(myIP), port);
         udpClient = new UdpClient();
-
+        udpClient.Connect(remoteEndPoint);
        
         Debug.Log("Sending to " + myIP + " : " + port);
 
     }
     public void SendData()
-    {
-        
-        sendString("This is a test message");
+    {        
+        SendString("This is a test message");
     }
-    private void sendString(string message)
+    private void SendString(string message)
     {
         try
-        {
-            
+        {           
             byte[] data = Encoding.UTF8.GetBytes(message);
+        
+            udpClient.Send(data, data.Length);
+            Debug.Log("Message sent");
 
-            
-            udpClient.Send(data, data.Length, remoteEndPoint);
             
         }
         catch (Exception err)

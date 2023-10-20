@@ -6,6 +6,7 @@ using TMPro;
 
 public class Text_Receiver_UI : MonoBehaviour
 {
+    [SerializeField] UDPReceive udpReceiver;
     TMP_Text tmpText;
     void Start()
     {
@@ -13,13 +14,9 @@ public class Text_Receiver_UI : MonoBehaviour
         tmpText.text = "Awaiting to receive data...";
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        tmpText.text = udpReceiver.GetStoredData();
     }
-    public void ChangeText(string text)
-    {
-        tmpText.text = text;
-    }
+   
 }

@@ -13,11 +13,9 @@ public class UDPReceive : MonoBehaviour
     
     Thread receiveThread;    
     UdpClient udpClient;
-    // public string IP = "127.0.0.1"; default 
-    public int port;
-
-    public Text_Receiver_UI uiReceiver;
-
+    public string myIp = "127.0.0.1";  
+    public int port = 0;
+    string storedText;
 
     private static UDPReceive instance;
   
@@ -29,24 +27,24 @@ public class UDPReceive : MonoBehaviour
         {
             Debug.LogError("There is already another instance of UDPReceive in the scene! Only one is allowed!", this);
             Debug.LogError("That's true, I am the active instance for this scene", instance);
-
-            this.enabled = false;
+            
+            Destroy(this.gameObject);
             return;
-        }
-        
+        }       
         instance = this;
-        
 
+        DontDestroyOnLoad(this.gameObject);
+
+        storedText = "Awaiting to receive data...";
     }
     public void Start()
     {
-
         Init();
     }
 
     private void Init()
     {                
-        port = 8051;       
+        
         Debug.Log("Receiving from 127.0.0.1 : " + port);
         
         receiveThread = new Thread(
@@ -58,19 +56,20 @@ public class UDPReceive : MonoBehaviour
     // receive thread
     private void ReceiveData()
     {
-
         udpClient = new UdpClient(port);
-        
+        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(myIp), port);
+        udpClient.Connect(remoteEndPoint);
         while (true)
         {
 
             try
-            {               
-                IPEndPoint myIP = new IPEndPoint(IPAddress.Any, port);
-                byte[] data = udpClient.Receive(ref myIP);              
+            {                             
+                byte[] data = udpClient.Receive(ref remoteEndPoint);
+                Debug.Log(data.Length);
+                //udpClient.ReceiveAsync();
                 string text = Encoding.UTF8.GetString(data);              
                 Debug.Log(text + " "); 
-                uiReceiver.ChangeText(text);
+                storedText = text;
             }
             catch (Exception err)
             {
@@ -90,4 +89,9 @@ public class UDPReceive : MonoBehaviour
         }
         udpClient.Close();
     }
+    public string GetStoredData()
+    {
+        return storedText;
+    }
+
 }

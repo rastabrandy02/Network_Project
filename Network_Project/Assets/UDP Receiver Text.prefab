@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 721035251131360731}
   - component: {fileID: 8186093977027328743}
   - component: {fileID: 3001344341956302036}
-  - component: {fileID: 5880092532433726295}
   m_Layer: 5
   m_Name: UDP Receiver Text
   m_TagString: Untagged
@@ -149,17 +148,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd84f82ef638208459362a8416d85265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5880092532433726295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2686640723820632078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19d9afb3df1d38b409e9b066f2b5facf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 0
-  uiReceiver: {fileID: 0}
+  udpReceiver: {fileID: 0}

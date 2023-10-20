@@ -11,29 +11,29 @@ public class TCPSocket : MonoBehaviour
 {
     
     
-    public void Init()
-    {
-        MenuManager.textTestServer = "TCP Server";
+    //public void Init()
+    //{
+    //    MenuManager.textTestServer = "TCP Server";
 
-        socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        ip = new IPEndPoint(IPAddress.Any, serverPort);
-        socketServer.Bind(ip);
+    //    socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    //    ip = new IPEndPoint(IPAddress.Any, serverPort);
+    //    socketServer.Bind(ip);
 
-        socketServer.Listen(1);
+    //    socketServer.Listen(1);
 
-        Receiving();
-    }
+    //    Receiving();
+    //}
 
-    void Update()
-    {
-        if (closeServer)
-        {
-            socketClient.Close();
-            socketServer.Close();
+    //void Update()
+    //{
+    //    if (closeServer)
+    //    {
+    //        socketClient.Close();
+    //        socketServer.Close();
 
-            thread.Abort();
-        }
-    }
+    //        thread.Abort();
+    //    }
+    //}
 }
 
 
