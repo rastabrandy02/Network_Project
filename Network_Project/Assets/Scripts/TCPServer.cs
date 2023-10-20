@@ -1,4 +1,4 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -32,7 +32,7 @@ public class TCPServer : MonoBehaviour
     
     public void Init()
     {
-        MenuManager.textTestServer = "TCP Server";
+       // MenuManager.textTestServer = "TCP Server";
 
         socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         ip = new IPEndPoint(IPAddress.Any, serverPort);
@@ -64,7 +64,7 @@ public class TCPServer : MonoBehaviour
             if(byteSend == message.Length)
             {
                 Debug.Log("Server: Sent correctly..." + message);
-                MenuManger.consoleTestServer.Add("Server: Sent correctly..." + message);
+               // MenuManger.consoleTestServer.Add("Server: Sent correctly..." + message);
 
 
                 
@@ -72,7 +72,7 @@ public class TCPServer : MonoBehaviour
             else
             {
                 Debug.Log("Server: Error not message sent");
-                MenuManger.consoleTestServer.Add("Server: Error not message sent");
+                //MenuManger.consoleTestServer.Add("Server: Error not message sent");
             }
         }
     }
@@ -92,8 +92,8 @@ public class TCPServer : MonoBehaviour
             {
                 socketClient = socketServer.Accept();
 
-                Debug.Log("Server: Server client connected in the server" + ip.Adress + "at port" + ip.Port);
-                MenuManager.consoleTestServer.Add("Server: Server client connected in the server" + ip.Adress + "at port" + ip.Port);
+                Debug.Log("Server: Server client connected in the server" + ip.Address + "at port" + ip.Port);
+                //MenuManager.consoleTestServer.Add("Server: Server client connected in the server" + ip.Adress + "at port" + ip.Port);
 
                 byte[] data = new byte[68];
 
@@ -103,20 +103,20 @@ public class TCPServer : MonoBehaviour
                     string msgRecieved = Encoding.ASCII.GetString(data);
                     string finalMsg = msgRecieved.Trim('\0');
 
-                    if(receivedBytes > 0)
+                    if (receivedBytes > 0)
                     {
-                        if(msgRecieved.Contains("Un video maaa mi gente"))
+                        if (msgRecieved.Contains("Un video maaa mi gente"))
                         {
                             Debug.Log("Server: Received message correctly" + finalMsg);
-                            MenuManager.consoleTestServer.Add("Server: Recieved message correctly" + finalMsg);
+                            //MenuManager.consoleTestServer.Add("Server: Recieved message correctly" + finalMsg);
 
                             Thread.Sleep(500);
                             Sending();
                         }
-                        else if(msgRecieved.Contains("Destroy"))
+                        else if (msgRecieved.Contains("Destroy"))
                         {
                             Debug.Log("Server: Desconnection");
-                            MenuManager.consoleTestServer.Add("Server: Desconnection");
+                            // MenuManager.consoleTestServer.Add("Server: Desconnection");
                             socketClient.Close();
                             socketClient = null;
                             socketServer.Close();
@@ -125,15 +125,17 @@ public class TCPServer : MonoBehaviour
                         }
                     }
 
-                    
+                }
+
+                catch
+                {
+
                 }
 
 
-            }
-            catch
-            {
 
             }
+            
         }
     }
     
@@ -144,7 +146,7 @@ public class TCPServer : MonoBehaviour
             closeServer = true;
         }
     }
-}*/
+}
 
 
 
