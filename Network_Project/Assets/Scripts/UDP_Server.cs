@@ -5,14 +5,13 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using UnityEngine;
-using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 
 public class UDP_Server : MonoBehaviour
 {
+    public string uiText;
     Thread connectThread;
-    Thread receiveThread;
+    Thread communicateThread;
     EndPoint Remote;
     Socket mySocket;
     byte[] data;
@@ -34,33 +33,34 @@ public class UDP_Server : MonoBehaviour
                         SocketType.Dgram, ProtocolType.Udp);
 
         mySocket.Bind(ipep);
-        Console.WriteLine("Waiting for a client...");
+        Debug.Log("Waiting for a client...");
 
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         Remote = sender;
 
-        receiveThread = new Thread(new ThreadStart(ReceiveThread));
-        receiveThread.IsBackground = true;
-        receiveThread.Start();
+        communicateThread = new Thread(new ThreadStart(CommunicateWithClient));
+        communicateThread.IsBackground = true;
+        communicateThread.Start();
     }
 
-    void ReceiveThread()
+    void CommunicateWithClient()
     {
         int recv;
         recv = mySocket.ReceiveFrom(data, ref Remote);
 
-        Console.WriteLine("Message received from {0}:", Remote.ToString());
-        Console.WriteLine(Encoding.ASCII.GetString(data, 0, recv));
+        Debug.Log("Message received from:" + Remote.ToString());
+        uiText = Encoding.ASCII.GetString(data, 0, recv);
+        Debug.Log(uiText);
 
-        string welcome = "Welcome to my test server";
+        string welcome = "Welcome to the test server";
         data = Encoding.ASCII.GetBytes(welcome);
         mySocket.SendTo(data, data.Length, SocketFlags.None, Remote);
         while (true)
         {
             data = new byte[1024];
             recv = mySocket.ReceiveFrom(data, ref Remote);
-
-            Console.WriteLine(Encoding.ASCII.GetString(data, 0, recv));
+            uiText = Encoding.ASCII.GetString(data, 0, recv);
+            Debug.Log(uiText);
             mySocket.SendTo(data, recv, SocketFlags.None, Remote);
         }
     }
