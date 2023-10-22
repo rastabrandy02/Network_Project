@@ -13,7 +13,7 @@ public class UDP_Server : MonoBehaviour
     Thread connectThread;
     Thread communicateThread;
     EndPoint Remote;
-    Socket mySocket;
+    Socket client;
     byte[] data;
     void Start()
     {
@@ -21,18 +21,18 @@ public class UDP_Server : MonoBehaviour
         connectThread.IsBackground = true;
         connectThread.Start();
 
-        
+
     }
     void ConnectThread()
     {
-       
+
         data = new byte[1024];
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
 
-        mySocket = new Socket(AddressFamily.InterNetwork,
+        client = new Socket(AddressFamily.InterNetwork,
                         SocketType.Dgram, ProtocolType.Udp);
 
-        mySocket.Bind(ipep);
+        client.Bind(ipep);
         Debug.Log("Waiting for a client...");
 
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
@@ -46,27 +46,28 @@ public class UDP_Server : MonoBehaviour
     void CommunicateWithClient()
     {
         int recv;
-        recv = mySocket.ReceiveFrom(data, ref Remote);
+        recv = client.ReceiveFrom(data, ref Remote);
 
         Debug.Log("Message received from:" + Remote.ToString());
         uiText = Encoding.ASCII.GetString(data, 0, recv);
         Debug.Log(uiText);
 
         string welcome = "Welcome to the test server";
-        data = Encoding.ASCII.GetBytes(welcome);
-        mySocket.SendTo(data, data.Length, SocketFlags.None, Remote);
+
         while (true)
         {
+            data = Encoding.ASCII.GetBytes(welcome);
+            client.SendTo(data, data.Length, SocketFlags.None, Remote);
+
             data = new byte[1024];
-            recv = mySocket.ReceiveFrom(data, ref Remote);
+            recv = client.ReceiveFrom(data, ref Remote);
             uiText = Encoding.ASCII.GetString(data, 0, recv);
             Debug.Log(uiText);
-            mySocket.SendTo(data, recv, SocketFlags.None, Remote);
+            //client.SendTo(data, recv, SocketFlags.None, Remote);
         }
     }
 
 
-   
+
 }
 
-   

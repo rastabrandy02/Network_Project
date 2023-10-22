@@ -13,26 +13,26 @@ public class UDP_Client : MonoBehaviour
     Thread communicateThread;
     EndPoint Remote;
     Socket server;
-    
-   
+
+
     void Start()
     {
         connectThread = new Thread(new ThreadStart(ConnectThread));
         connectThread.IsBackground = true;
         connectThread.Start();
     }
-   
-    
+
+
 
     void ConnectThread()
     {
         byte[] data = new byte[1024];
-       
+
         IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
 
         server = new Socket(AddressFamily.InterNetwork,
                        SocketType.Dgram, ProtocolType.Udp);
-        
+
         string welcome = "Hello, are you there?";
         data = Encoding.ASCII.GetBytes(welcome);
         server.SendTo(data, data.Length, SocketFlags.None, ipep);
@@ -45,7 +45,7 @@ public class UDP_Client : MonoBehaviour
         communicateThread.Start();
     }
 
-     void CommunicateWithServer()
+    void CommunicateWithServer()
     {
         byte[] data = new byte[1024];
         int recv = server.ReceiveFrom(data, ref Remote);
@@ -54,7 +54,7 @@ public class UDP_Client : MonoBehaviour
         Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
 
         string message = "Hello, I'm dummyUser01";
-        
+
 
         while (true)
         {
