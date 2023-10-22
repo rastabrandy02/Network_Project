@@ -9,144 +9,105 @@ using System.Threading;
 
 public class TCPServer : MonoBehaviour
 {
-    bool exit = false;
-    bool closeServer = false;
+    private Thread _acceptThread;
+    private EndPoint _endPoint;
+    private Socket _socket;
+    private int _port = 6969;
 
-    Socket socketServer;
+    private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
+    private List<Socket> _connectedClients = new List<Socket>();
+    private List<Thread> _clientThreads = new List<Thread>();
 
-    Socket socketClient;
-
-    IPEndPoint ip;
-
-    int serverPort = 5666;
-
-    public string message = "Un video maaa mi gente";
-
-
-    Thread thread;
-
-    void Start()
+    private void Start()
     {
-
-    }
-    
-    public void Init()
-    {
-       // MenuManager.textTestServer = "TCP Server";
-
-        socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        ip = new IPEndPoint(IPAddress.Any, serverPort);
-        socketServer.Bind(ip);
-
-        socketServer.Listen(1);
-
-        Receiving();
+        InitServer();
     }
 
-    void Update()
+    void InitServer()
     {
-        if (closeServer)
+        //Create & bind endpoint and socket
+        _endPoint = new IPEndPoint(IPAddress.Any, _port);
+        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _socket.Bind(_endPoint);
+
+        Debug.Log("Created server, listenig on port " + _port);
+        _socket.Listen(10);
+
+        _acceptThread = new Thread(AcceptConnections);
+        _acceptThread.Start();
+
+    }
+
+    void AcceptConnections()
+    {
+        while (true)
         {
-            socketClient.Close();
-            socketServer.Close();
+            Socket client = _socket.Accept();
+            Debug.Log("A client has connected! \nIP: " + client.RemoteEndPoint + ", Port: " + _port);
 
-            thread.Abort();
+            Thread clientThread = new Thread(() => RecieveMessage(client));
+
+            lock (_clientMutex) //locking so other threads don't access the variables
+            {
+                _connectedClients.Add(client);
+                _clientThreads.Add(clientThread);
+            }
+
+            clientThread.Start();
         }
     }
 
-    void Sending()
+    void RecieveMessage(Socket socket)
     {
-        if (socketClient != null)
+        while (true)
         {
-            byte[] data = Encoding.ASCII.GetBytes(message);
-            int byteSend = socketClient.Send(data);
-            
-            if(byteSend == message.Length)
-            {
-                Debug.Log("Server: Sent correctly..." + message);
-               // MenuManger.consoleTestServer.Add("Server: Sent correctly..." + message);
+            //Recieve User Name
+            byte[] data = new byte[2048];
+            int recievedBytes = socket.Receive(data);
 
+            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log("User Name is: " + userName);
 
-                
-            }
-            else
-            {
-                Debug.Log("Server: Error not message sent");
-                //MenuManger.consoleTestServer.Add("Server: Error not message sent");
-            }
+            //Send Server Name
+            data = Encoding.ASCII.GetBytes("John Server Inventor de los Servers");
+            socket.Send(data);
         }
     }
 
-    void Receiving()
-    {
-        thread = new Thread(threadRecievesServerData);
-        thread.Start();
-
-    }
-
-    void threadRecievesServerData()
-    {
-        while(!exit)
-        {
-            if (socketClient == null)
-            {
-                socketClient = socketServer.Accept();
-
-                Debug.Log("Server: Server client connected in the server" + ip.Address + "at port" + ip.Port);
-                //MenuManager.consoleTestServer.Add("Server: Server client connected in the server" + ip.Adress + "at port" + ip.Port);
-
-                byte[] data = new byte[68];
-
-                try
-                {
-                    int receivedBytes = socketClient.Receive(data);
-                    string msgRecieved = Encoding.ASCII.GetString(data);
-                    string finalMsg = msgRecieved.Trim('\0');
-
-                    if (receivedBytes > 0)
-                    {
-                        if (msgRecieved.Contains("Un video maaa mi gente"))
-                        {
-                            Debug.Log("Server: Received message correctly" + finalMsg);
-                            //MenuManager.consoleTestServer.Add("Server: Recieved message correctly" + finalMsg);
-
-                            Thread.Sleep(500);
-                            Sending();
-                        }
-                        else if (msgRecieved.Contains("Destroy"))
-                        {
-                            Debug.Log("Server: Desconnection");
-                            // MenuManager.consoleTestServer.Add("Server: Desconnection");
-                            socketClient.Close();
-                            socketClient = null;
-                            socketServer.Close();
-                            exit = true;
-                            break;
-                        }
-                    }
-
-                }
-
-                catch
-                {
-
-                }
-
-
-
-            }
-            
-        }
-    }
-    
     private void OnDestroy()
     {
-        if (thread != null && thread.IsAlive && exit == false)
+        //Destroy Threads
+        if (_acceptThread != null)
         {
-            closeServer = true;
+            if (_acceptThread.IsAlive)
+            {
+                _acceptThread.Abort();
+
+            }
+        }
+
+        foreach (var thread in _clientThreads)
+        {
+            if (thread.IsAlive)
+            {
+                thread.Abort();
+            }
+        }
+
+        //Destroy Socket
+        if (_socket != null)
+        {
+            if (_socket.Connected)
+            {
+                _socket.Shutdown(SocketShutdown.Both);
+            }
+
+            _socket.Close();
         }
     }
 }
+
+
 
 
 

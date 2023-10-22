@@ -9,129 +9,88 @@ using System.Threading;
 
 public class TCPClient : MonoBehaviour
 {
-    bool exit = false;
-    bool firstTimeSend = true;
-    bool backUpSend = false;
+    private Socket _socket;
+    private EndPoint _endPoint; //This endpoint is where you want to connect aka server IPAddress
+    private int _port = 6969;
+    private Thread _userThread;
 
-    Socket socket;
+    public string IP { get; set; }
+    public string userName { get; set; }
 
-    IPEndPoint ip;
-
-    int serverPort = 5666;
-
-    public string message = "Pa perdeer el tieeempo";
-
-    Thread thread;
-
-    int countPongs = 1;
-
-
-    void Start()
+    public void ConnectToServer()
     {
-        
-    }
-
-    public void Init()
-    {
-        //MenuManager.textTestClient = "TCP Client";
-
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort);
-
-        Receiving();
-    }
-
-    
-    void Update()
-    {
-        if (firstTimeSend)
-            Sending();
-    }
-
-    void Sending()
-    {
-        if (socket != null)
+        if (IP == "")
         {
-            firstTimeSend = false;
-            byte[] data = Encoding.ASCII.GetBytes(message); ;
-            int bytesSend = socket.Send(data);
+            Debug.LogError("IP is null RAAAAAAAH");
+            return;
+        }
 
-            if (bytesSend == message.Length)
-            {
-                Debug.Log("Client: Send Correctly " + message);
-                //MenuManager.consoleTestClient.Add("Client: Send Correctly " + message);
-            }
-            else
-            {
-                Debug.Log("Client: Error sending");
-                //MenuManager.consoleTestClient.Add("Client: Error sending");
-            }
+        bool isValid = IPAddress.TryParse(IP, out var iPAddress);
+
+        if (!isValid)
+        {
+            Debug.LogError("IP isn't valid nigga");
+            return;
+        }
+
+        _endPoint = new IPEndPoint(iPAddress, _port);
+        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+        try
+        {
+            _socket.Connect(_endPoint);
+            Debug.Log("Trying to connect to server...");
+
+            _userThread = new Thread(MessageServer);
+            _userThread.Start();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error connecting to server gyatt rizz ohio ////" + e);
+            return;
         }
     }
 
-    void Receiving()
+    void MessageServer()
     {
-        thread = new Thread(threadRecievesServerData);
-        thread.Start();
-    }
-
-    void threadRecievesServerData()
-    {
-        socket.Connect(ip);
-
-        Debug.Log("Client: Connected to the server " + ip.Address + " at port " + ip.Port);
-        //MenuManager.consoleTestClient.Add("Client: Connected to the server " + ip.Address + " at port " + ip.Port);
-
-        while (!exit)
+        while(true)
         {
-            byte[] data = new byte[68];
-
-            try
-            {
-                int receivedBytes = socket.Receive(data);
-
-                string msgRecieved = Encoding.ASCII.GetString(data);
-                string finalMsg = msgRecieved.Trim('\0');
-                if (receivedBytes > 0)
-                {
-                    if (msgRecieved.Contains("Un video maaa mi gente"))
-                    {
-                        Debug.Log("Client: Received Correctly: " + finalMsg);
-                       // MenuManager.consoleTestClient.Add("Client: Received Correctly: " + finalMsg);
-
-                        Thread.Sleep(500);
-                        Sending();
-                        countPongs++;
-                        if (countPongs == 5)
-                        {
-                            message = "Destroy";
-                            Sending();
-                            exit = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                if (socket != null && backUpSend == false)
-                {
-                    Debug.Log("Client: Did not get message from server.");
-                    //MenuManager.consoleTestClient.Add("Client: Did not get message from server.");
-                    backUpSend = true;
-                    message = "Pa perdeer el tieeempo";
-                    Sending();
-                   
-                }
-                else if (socket != null && backUpSend == true)
-                {
-                    socket.Close();
-                    socket = null;
-                    exit = true;
-
-                }
-            }
+            //Send User Name
+            byte[] data = Encoding.ASCII.GetBytes(userName); //converting username to the data which will be sent to the server
+            _socket.Send(data, data.Length, SocketFlags.None); //send data to server
+            Debug.Log("Sent user name to server");
+            
+            //Recieve Server Name
+            data = new byte[2048];
+            int recievedBytes = _socket.Receive(data);
+          
+            string serverName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log("Server Name is: " + serverName);
+            break;
         }
     }
 
+    private void OnDestroy()
+    {
+        //Destroy Thread
+        if (_userThread != null)
+        {
+            if (_userThread.IsAlive)
+            {
+                _userThread.Abort();
+            }
+        }
+
+        //Destroy Socket
+        if (_socket != null)
+        {
+            if (_socket.Connected)
+            {
+                _socket.Shutdown(SocketShutdown.Both);
+            }
+
+            _socket.Close();
+        }
+    }
 }
+
