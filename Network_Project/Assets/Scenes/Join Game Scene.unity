@@ -1642,8 +1642,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 465855564}
-        m_TargetAssemblyTypeName: TCPClient, Assembly-CSharp
+      - m_Target: {fileID: 390280107}
+        m_TargetAssemblyTypeName: UDP_Client, Assembly-CSharp
         m_MethodName: ConnectToServer
         m_Mode: 1
         m_Arguments:

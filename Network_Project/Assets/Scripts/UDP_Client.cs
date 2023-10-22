@@ -13,7 +13,7 @@ public class UDP_Client : MonoBehaviour
     public string userName { get; set; }
 
     string serverName;
-    int port = 2002;
+    int port = 9999;
 
     Thread communicateThread;
     Socket mySocket;

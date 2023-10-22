@@ -10,7 +10,7 @@ using TMPro;
 
 public class UDP_Server : MonoBehaviour
 {
-    int port = 2002;
+    int port = 9999;
     Thread acceptThread;
     Socket mySocket;
 
@@ -37,12 +37,12 @@ public class UDP_Server : MonoBehaviour
 
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
 
-        mySocket = new Socket(AddressFamily.InterNetwork,
-                        SocketType.Dgram, ProtocolType.Udp);
+        mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         mySocket.Bind(ipep);
-
+        
         Debug.Log("Created server, listenig on port " + port);
+
         mySocket.Listen(10);
 
         acceptThread = new Thread(AcceptConnections);
@@ -75,7 +75,7 @@ public class UDP_Server : MonoBehaviour
 
             Thread clientThread = new Thread(() => RecieveMessage(netSocket));
 
-            lock (clientMutex) //locking so other threads don't access the variables
+            lock (clientMutex) 
             {
                 connectedClients.Add(netSocket);
                 clientThreads.Add(clientThread);
