@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Hierarchy
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 101
+  controlID: 21
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 102
+  controlID: 22
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 103
+  controlID: 23
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -346,22 +346,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scripts/UI
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Scripts/UI
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\traxo\Documents\GitHub\Network_Project\Network_Project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c65f0000
-    m_LastClickedID: 24518
-    m_ExpandedIDs: 00000000a45f0000c85f00006c8100008281000000ca9a3bffffff7f
+    m_SelectedIDs: fa630000
+    m_LastClickedID: 25594
+    m_ExpandedIDs: 000000008e600000a260000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -389,7 +389,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a45f0000
+    m_ExpandedIDs: 000000008e600000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -420,18 +420,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Create Game Scene
-      m_OriginalName: Create Game Scene
+      m_Name: ConnectedClientsUI
+      m_OriginalName: ConnectedClientsUI
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 24602
+      m_UserData: 34590
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 4
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 5}
     m_CreateAssetUtility:
@@ -519,7 +519,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: ecb8ffffb4bafffffabaffff5cbcffff62bcffff08beffff22c2ffff5ec6ffff60c6ffff9ac7ffffe0ccffff80ceffffc4ceffff2ad0ffff32d0ffff3cd0ffffacdaffffb2daffffe2ddffff90deffff94e7ffff32f3ffff8cf3ffff2af5ffff58f6ffff72f7ffffeaf8ffff2afbffff4c790000427a0000987c00002a7e0000588f0000
+      m_ExpandedIDs: e8b2ffff2eb3ffff98b4ffffa0b4ffff6eb6ffffd0bbffff16bcffff80bdffff88bdffff56bfffff6ec9ffffc2c9fffff2ceffff38cfffff9ad0ffffa2d0ffff64d2fffffad6ffff16daffffe0daffff26dbffff88dcffff90dcffff52deffffb0e6ffff8ceaffff7cebffffe4f8ffff32f9ffff2afbffff3660000030610000de780000a6800000b0800000e2860000208900006c8b0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -823,9 +823,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 557.1502, y: 289.65652, z: -1.6402731}
+    m_Target: {x: 553.49786, y: 315.75165, z: -0.18695374}
     speed: 2
-    m_Value: {x: 557.1502, y: 289.65652, z: -1.6402731}
+    m_Value: {x: 553.49786, y: 315.75165, z: -0.18695374}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -876,9 +876,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 288.1581
+    m_Target: 358.39832
     speed: 2
-    m_Value: 288.1581
+    m_Value: 358.39832
   m_Ortho:
     m_Target: 1
     speed: 2

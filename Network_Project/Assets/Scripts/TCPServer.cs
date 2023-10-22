@@ -15,12 +15,23 @@ public class TCPServer : MonoBehaviour
     private int _port = 6969;
 
     private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
-    private List<Socket> _connectedClients = new List<Socket>();
+    private List<NetworkSocket> _connectedClients = new List<NetworkSocket>();
     private List<Thread> _clientThreads = new List<Thread>();
+
+    public TMPro.TextMeshProUGUI IPText;
+    public TMPro.TextMeshProUGUI clientsText;
+
+    private bool _refreshList = true;
 
     private void Start()
     {
         InitServer();
+        SetServerIP_UI();
+    }
+
+    private void Update()
+    {
+        if (_refreshList) RefreshList();
     }
 
     void InitServer()
@@ -38,6 +49,22 @@ public class TCPServer : MonoBehaviour
 
     }
 
+    //print the Server IP on the canvas of the create server scene
+    void SetServerIP_UI() 
+    {
+        IPAddress hostIP = IPAddress.Any;
+
+        foreach (var ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                hostIP = ip;
+            }
+        }
+
+        IPText.text = "IP: " + hostIP.ToString();
+    }
+
     void AcceptConnections()
     {
         while (true)
@@ -45,11 +72,13 @@ public class TCPServer : MonoBehaviour
             Socket client = _socket.Accept();
             Debug.Log("A client has connected! \nIP: " + client.RemoteEndPoint + ", Port: " + _port);
 
-            Thread clientThread = new Thread(() => RecieveMessage(client));
+            NetworkSocket netSocket = new NetworkSocket("Default", client);
+
+            Thread clientThread = new Thread(() => RecieveMessage(netSocket));
 
             lock (_clientMutex) //locking so other threads don't access the variables
             {
-                _connectedClients.Add(client);
+                _connectedClients.Add(netSocket);
                 _clientThreads.Add(clientThread);
             }
 
@@ -57,21 +86,39 @@ public class TCPServer : MonoBehaviour
         }
     }
 
-    void RecieveMessage(Socket socket)
+    void RecieveMessage(NetworkSocket netSocket)
     {
         while (true)
         {
             //Recieve User Name
             byte[] data = new byte[2048];
-            int recievedBytes = socket.Receive(data);
+            int recievedBytes = netSocket.socket.Receive(data);
 
             string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
             Debug.Log("User Name is: " + userName);
 
+            netSocket.userName = userName;
+
+           
+            _refreshList = true;
+            
+
             //Send Server Name
             data = Encoding.ASCII.GetBytes("John Server Inventor de los Servers");
-            socket.Send(data);
+            netSocket.socket.Send(data);
         }
+    }
+
+    void RefreshList()
+    {
+        clientsText.text = "";
+
+        foreach (var client in _connectedClients)
+        {
+            clientsText.text += client.userName + "\n";
+        }
+
+        _refreshList = false;
     }
 
     private void OnDestroy()

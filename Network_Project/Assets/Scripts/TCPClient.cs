@@ -17,6 +17,33 @@ public class TCPClient : MonoBehaviour
     public string IP { get; set; }
     public string userName { get; set; }
 
+    public GameObject joinServerUI;
+    public GameObject lobbyUI;
+
+    private string _savedServerName;
+    private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
+
+    private bool _connected = false;
+
+    private void Start()
+    {
+        lobbyUI.SetActive(false);
+        joinServerUI.SetActive(true);
+    }
+
+    private void Update()
+    {
+        if (_socket != null)
+        {
+            if (_connected && !lobbyUI.activeSelf)
+            {
+                lobbyUI.SetActive(true);
+                joinServerUI.SetActive(false);
+                lobbyUI.GetComponent<LobbyUI>().SetNames(userName, _savedServerName);
+            }
+        }
+    }
+
     public void ConnectToServer()
     {
         if (IP == "")
@@ -53,7 +80,7 @@ public class TCPClient : MonoBehaviour
 
     void MessageServer()
     {
-        while(true)
+        while (true)
         {
             //Send User Name
             byte[] data = Encoding.ASCII.GetBytes(userName); //converting username to the data which will be sent to the server
@@ -63,9 +90,15 @@ public class TCPClient : MonoBehaviour
             //Recieve Server Name
             data = new byte[2048];
             int recievedBytes = _socket.Receive(data);
-          
+
             string serverName = Encoding.ASCII.GetString(data, 0, recievedBytes);
             Debug.Log("Server Name is: " + serverName);
+
+            lock (_clientMutex)
+            {
+                _savedServerName = serverName;
+                _connected = true;
+            }
             break;
         }
     }
