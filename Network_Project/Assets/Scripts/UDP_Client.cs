@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
@@ -8,62 +9,119 @@ using System.Text;
 
 public class UDP_Client : MonoBehaviour
 {
-    public string uiText;
-    Thread connectThread;
-    Thread communicateThread;
-    EndPoint Remote;
-    Socket server;
+    public string IP { get; set; }
+    public string userName { get; set; }
 
+    string serverName;
+    int port = 2002;
+
+    Thread communicateThread;
+    Socket mySocket;
+    object clientMutex = new object();
+
+    bool isConnected = false;
+
+    public GameObject joinServerUI;
+    public GameObject lobbyUI;
 
     void Start()
     {
-        connectThread = new Thread(new ThreadStart(ConnectThread));
-        connectThread.IsBackground = true;
-        connectThread.Start();
+        lobbyUI.SetActive(false);
+        joinServerUI.SetActive(true);
     }
-
-
-
-    void ConnectThread()
+    void Update()
     {
-        byte[] data = new byte[1024];
-
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
-
-        server = new Socket(AddressFamily.InterNetwork,
-                       SocketType.Dgram, ProtocolType.Udp);
-
-        string welcome = "Hello, are you there?";
-        data = Encoding.ASCII.GetBytes(welcome);
-        server.SendTo(data, data.Length, SocketFlags.None, ipep);
-
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        Remote = sender;
-
-        communicateThread = new Thread(new ThreadStart(CommunicateWithServer));
-        communicateThread.IsBackground = true;
-        communicateThread.Start();
+        if (mySocket != null)
+        {
+            if (isConnected && !lobbyUI.activeSelf)
+            {
+                lobbyUI.SetActive(true);
+                joinServerUI.SetActive(false);
+                lobbyUI.GetComponent<LobbyUI>().SetNames(userName, serverName);
+            }
+        }
     }
 
+    public void ConnectToServer()
+    {
+        if (IP == "")
+        {
+            Debug.LogError("IP is null");
+            return;
+        }
+
+        bool isValid = IPAddress.TryParse(IP, out var iPAddress);
+
+        if (!isValid)
+        {
+            Debug.LogError("invalid IP");
+            return;
+        }
+
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(IP), port);
+
+        mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+        try
+        {
+            mySocket.Connect(ipep);
+            Debug.Log("Trying to connect to server...");
+
+            communicateThread = new Thread(CommunicateWithServer);
+            communicateThread.IsBackground = true;
+            communicateThread.Start();
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error connecting to server " + e);
+            return;
+        }
+
+    }
     void CommunicateWithServer()
     {
-        byte[] data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
-
-        Debug.Log("Message received from {0}:" + Remote.ToString());
-        Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
-
-        string message = "Hello, I'm dummyUser01";
-
-
         while (true)
         {
+            //Send User Name
+            byte[] data = Encoding.ASCII.GetBytes(userName);
+            mySocket.Send(data, data.Length, SocketFlags.None);
+            Debug.Log("Sent user name to server");
 
-            server.SendTo(Encoding.ASCII.GetBytes(message), Remote);
-            data = new byte[1024];
-            recv = server.ReceiveFrom(data, ref Remote);
-            uiText = Encoding.ASCII.GetString(data, 0, recv);
-            Debug.Log(uiText);
+            //Recieve Server Name
+            data = new byte[2048];
+            int recievedBytes = mySocket.Receive(data);
+
+            string savedServerName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log("Server Name is: " + savedServerName);
+
+
+            lock (clientMutex)
+            {
+                savedServerName = serverName;
+                isConnected = true;
+            }
+            break;
+        }
+    }
+    private void OnDestroy()
+    {
+        //Destroy Thread
+        if (communicateThread != null)
+        {
+            if (communicateThread.IsAlive)
+            {
+                communicateThread.Abort();
+            }
+        }
+        //Destroy Socket
+        if (mySocket != null)
+        {
+            if (mySocket.Connected)
+            {
+                mySocket.Shutdown(SocketShutdown.Both);
+            }
+            mySocket.Close();
         }
     }
 }

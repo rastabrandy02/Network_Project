@@ -6,66 +6,151 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using System.Threading;
+using TMPro;
 
 public class UDP_Server : MonoBehaviour
 {
-    public string uiText;
-    Thread connectThread;
-    Thread communicateThread;
-    EndPoint Remote;
-    Socket client;
-    byte[] data;
+    int port = 2002;
+    Thread acceptThread;
+    Socket mySocket;
+
+    private List<NetworkSocket> connectedClients = new List<NetworkSocket>();
+    private List<Thread> clientThreads = new List<Thread>();
+
+    public TextMeshProUGUI IPText;
+    public TextMeshProUGUI clientsText;
+
+    private object clientMutex = new object();
+    bool refreshUserList = true;
     void Start()
     {
-        connectThread = new Thread(new ThreadStart(ConnectThread));
-        connectThread.IsBackground = true;
-        connectThread.Start();
-
-
+        InitServer();
+        SetServerIP_UI();
     }
-    void ConnectThread()
+    void Update()
+    {
+        if (refreshUserList) RefreshList();
+    }
+
+    void InitServer()
     {
 
-        data = new byte[1024];
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
 
-        client = new Socket(AddressFamily.InterNetwork,
+        mySocket = new Socket(AddressFamily.InterNetwork,
                         SocketType.Dgram, ProtocolType.Udp);
 
-        client.Bind(ipep);
-        Debug.Log("Waiting for a client...");
+        mySocket.Bind(ipep);
 
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        Remote = sender;
+        Debug.Log("Created server, listenig on port " + port);
+        mySocket.Listen(10);
 
-        communicateThread = new Thread(new ThreadStart(CommunicateWithClient));
-        communicateThread.IsBackground = true;
-        communicateThread.Start();
+        acceptThread = new Thread(AcceptConnections);
+        acceptThread.Start();
+    }
+    void SetServerIP_UI()
+    {
+        IPAddress hostIP = IPAddress.Any;
+
+        foreach (var ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                hostIP = ip;
+            }
+        }
+
+        IPText.text = "IP: " + hostIP.ToString();
     }
 
-    void CommunicateWithClient()
+    void AcceptConnections()
     {
-        int recv;
-        recv = client.ReceiveFrom(data, ref Remote);
-
-        Debug.Log("Message received from:" + Remote.ToString());
-        uiText = Encoding.ASCII.GetString(data, 0, recv);
-        Debug.Log(uiText);
-
-        string welcome = "Welcome to the test server";
-
         while (true)
         {
-            data = Encoding.ASCII.GetBytes(welcome);
-            client.SendTo(data, data.Length, SocketFlags.None, Remote);
+            Socket client = mySocket.Accept();
 
-            data = new byte[1024];
-            recv = client.ReceiveFrom(data, ref Remote);
-            uiText = Encoding.ASCII.GetString(data, 0, recv);
-            Debug.Log(uiText);
-            //client.SendTo(data, recv, SocketFlags.None, Remote);
+            Debug.Log("New client! -  IP: " + client.RemoteEndPoint + " Port: " + port);
+
+            NetworkSocket netSocket = new NetworkSocket("Default", client);
+
+            Thread clientThread = new Thread(() => RecieveMessage(netSocket));
+
+            lock (clientMutex) //locking so other threads don't access the variables
+            {
+                connectedClients.Add(netSocket);
+                clientThreads.Add(clientThread);
+            }
+
+            clientThread.Start();
         }
     }
+    void RecieveMessage(NetworkSocket netSocket)
+    {
+        while (true)
+        {
+            //Recieve User Name
+            byte[] data = new byte[2048];
+            int recievedBytes = netSocket.socket.Receive(data);
+
+            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log("User Name is: " + userName);
+
+            netSocket.userName = userName;
+
+
+            refreshUserList = true;
+
+
+            //Send Server Name
+            data = Encoding.ASCII.GetBytes("UDP Serverino");
+            netSocket.socket.Send(data);
+        }
+    }
+
+    void RefreshList()
+    {
+        clientsText.text = "";
+
+        foreach (var client in connectedClients)
+        {
+            clientsText.text += client.userName + "\n";
+        }
+
+        refreshUserList = false;
+    }
+
+    private void OnDestroy()
+    {
+        //Destroy Threads
+        if (acceptThread != null)
+        {
+            if (acceptThread.IsAlive)
+            {
+                acceptThread.Abort();
+
+            }
+        }
+
+        foreach (var thread in clientThreads)
+        {
+            if (thread.IsAlive)
+            {
+                thread.Abort();
+            }
+        }
+
+        //Destroy Socket
+        if (mySocket != null)
+        {
+            if (mySocket.Connected)
+            {
+                mySocket.Shutdown(SocketShutdown.Both);
+            }
+
+            mySocket.Close();
+        }
+    }
+
 
 
 
