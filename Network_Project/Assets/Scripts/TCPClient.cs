@@ -23,7 +23,7 @@ public class TCPClient : MonoBehaviour
     private string _savedServerName;
     private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
 
-    private bool _connected = false;
+    public bool _connected = false;
 
     private void Start()
     {

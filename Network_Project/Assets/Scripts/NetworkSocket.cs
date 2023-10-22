@@ -7,34 +7,30 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-public class TCPSocket : MonoBehaviour
+public class NetworkSocket
 {
-    
-    
-    //public void Init()
-    //{
-    //    MenuManager.textTestServer = "TCP Server";
+    public string userName;
+    public Socket socket;
+    public EndPoint endPoint;
 
-    //    socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    //    ip = new IPEndPoint(IPAddress.Any, serverPort);
-    //    socketServer.Bind(ip);
+    public NetworkSocket(string name, Socket sock, IPAddress Address, int port)
+    {
+        userName = name;
+        socket = sock;
+        endPoint = new IPEndPoint(Address, port);
+    }
 
-    //    socketServer.Listen(1);
+    public NetworkSocket(string name, Socket sock, EndPoint _endPoint)
+    {
+        userName = name;
+        socket = sock;
+        endPoint = _endPoint;
+    }
 
-    //    Receiving();
-    //}
-
-    //void Update()
-    //{
-    //    if (closeServer)
-    //    {
-    //        socketClient.Close();
-    //        socketServer.Close();
-
-    //        thread.Abort();
-    //    }
-    //}
 }
+
+
+
 
 
 

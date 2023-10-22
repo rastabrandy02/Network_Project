@@ -72,7 +72,7 @@ public class TCPServer : MonoBehaviour
             Socket client = _socket.Accept();
             Debug.Log("A client has connected! \nIP: " + client.RemoteEndPoint + ", Port: " + _port);
 
-            NetworkSocket netSocket = new NetworkSocket("Default", client);
+            NetworkSocket netSocket = new NetworkSocket("Default", client, client.RemoteEndPoint);
 
             Thread clientThread = new Thread(() => RecieveMessage(netSocket));
 

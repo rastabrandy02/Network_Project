@@ -15,11 +15,13 @@ public class UDP_Client : MonoBehaviour
     string serverName;
     int port = 9999;
 
+    EndPoint _endPoint;
+
     Thread communicateThread;
     Socket mySocket;
     object clientMutex = new object();
 
-    bool isConnected = false;
+    public bool isConnected = false;
 
     public GameObject joinServerUI;
     public GameObject lobbyUI;
@@ -58,13 +60,13 @@ public class UDP_Client : MonoBehaviour
             return;
         }
 
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(IP), port);
+        _endPoint = new IPEndPoint(IPAddress.Parse(IP), port);
 
         mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         try
         {
-            mySocket.Connect(ipep);
+            mySocket.Connect(_endPoint);
             Debug.Log("Trying to connect to server...");
 
             communicateThread = new Thread(CommunicateWithServer);
@@ -85,12 +87,12 @@ public class UDP_Client : MonoBehaviour
         {
             //Send User Name
             byte[] data = Encoding.ASCII.GetBytes(userName);
-            mySocket.Send(data, data.Length, SocketFlags.None);
+            mySocket.SendTo(data, data.Length, SocketFlags.None, _endPoint);
             Debug.Log("Sent user name to server");
 
             //Recieve Server Name
             data = new byte[2048];
-            int recievedBytes = mySocket.Receive(data);
+            int recievedBytes = mySocket.ReceiveFrom(data, ref _endPoint);
 
             string savedServerName = Encoding.ASCII.GetString(data, 0, recievedBytes);
             Debug.Log("Server Name is: " + savedServerName);
@@ -100,6 +102,7 @@ public class UDP_Client : MonoBehaviour
             {
                 savedServerName = serverName;
                 isConnected = true;
+
             }
             break;
         }

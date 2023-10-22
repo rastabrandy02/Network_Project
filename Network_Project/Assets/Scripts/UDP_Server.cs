@@ -12,7 +12,7 @@ public class UDP_Server : MonoBehaviour
 {
     int port = 9999;
     Thread acceptThread;
-    Socket mySocket;
+    Socket _socket;
 
     private List<NetworkSocket> connectedClients = new List<NetworkSocket>();
     private List<Thread> clientThreads = new List<Thread>();
@@ -37,13 +37,11 @@ public class UDP_Server : MonoBehaviour
 
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
 
-        mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        mySocket.Bind(ipep);
-        
+        _socket.Bind(ipep);
+
         Debug.Log("Created server, listenig on port " + port);
-
-        mySocket.Listen(10);
 
         acceptThread = new Thread(AcceptConnections);
         acceptThread.Start();
@@ -67,43 +65,54 @@ public class UDP_Server : MonoBehaviour
     {
         while (true)
         {
-            Socket client = mySocket.Accept();
+            EndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
+            byte[] data = new byte[2048];
 
-            Debug.Log("New client! -  IP: " + client.RemoteEndPoint + " Port: " + port);
+            int recievedBytes = _socket.ReceiveFrom(data, ref endPoint);
 
-            NetworkSocket netSocket = new NetworkSocket("Default", client);
+            Debug.Log("New client! -  IP: " + endPoint);
 
-            Thread clientThread = new Thread(() => RecieveMessage(netSocket));
+            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
 
-            lock (clientMutex) 
+            NetworkSocket netSocket = new NetworkSocket(userName, null, endPoint);
+
+            Thread clientThread = new Thread(RecieveMessage);
+
+            lock (clientMutex)
             {
                 connectedClients.Add(netSocket);
                 clientThreads.Add(clientThread);
             }
 
             clientThread.Start();
-        }
-    }
-    void RecieveMessage(NetworkSocket netSocket)
-    {
-        while (true)
-        {
-            //Recieve User Name
-            byte[] data = new byte[2048];
-            int recievedBytes = netSocket.socket.Receive(data);
-
-            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
-            Debug.Log("User Name is: " + userName);
-
-            netSocket.userName = userName;
-
 
             refreshUserList = true;
 
 
             //Send Server Name
             data = Encoding.ASCII.GetBytes("UDP Serverino");
-            netSocket.socket.Send(data);
+            _socket.SendTo(data, endPoint);
+        }
+    }
+    void RecieveMessage()
+    {
+        while (true)
+        {
+            EndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
+
+            //Recieve User Name
+            byte[] data = new byte[2048];
+            int recievedBytes = _socket.ReceiveFrom(data, ref endPoint);
+
+            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log("User Name is: " + userName);
+
+            refreshUserList = true;
+
+
+            //Send Server Name
+            data = Encoding.ASCII.GetBytes("UDP Serverino");
+            _socket.SendTo(data, endPoint);
         }
     }
 
@@ -140,14 +149,14 @@ public class UDP_Server : MonoBehaviour
         }
 
         //Destroy Socket
-        if (mySocket != null)
+        if (_socket != null)
         {
-            if (mySocket.Connected)
+            if (_socket.Connected)
             {
-                mySocket.Shutdown(SocketShutdown.Both);
+                _socket.Shutdown(SocketShutdown.Both);
             }
 
-            mySocket.Close();
+            _socket.Close();
         }
     }
 
