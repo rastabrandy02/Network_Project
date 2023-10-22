@@ -50,7 +50,7 @@ public class TCPServer : MonoBehaviour
     }
 
     //print the Server IP on the canvas of the create server scene
-    void SetServerIP_UI() 
+    void SetServerIP_UI()
     {
         IPAddress hostIP = IPAddress.Any;
 
@@ -88,7 +88,7 @@ public class TCPServer : MonoBehaviour
 
     void RecieveMessage(NetworkSocket netSocket)
     {
-        while (true)
+        //Registering Client
         {
             //Recieve User Name
             byte[] data = new byte[2048];
@@ -99,13 +99,38 @@ public class TCPServer : MonoBehaviour
 
             netSocket.userName = userName;
 
-           
+
             _refreshList = true;
-            
+
 
             //Send Server Name
             data = Encoding.ASCII.GetBytes("John Server Inventor de los Servers");
             netSocket.socket.Send(data);
+        }
+
+        //Recieving Chat Messages
+        while (true)
+        {
+            byte[] data = new byte[2048];
+            int recievedBytes = netSocket.socket.Receive(data);
+
+            if (recievedBytes == 0)
+            {
+                lock (_clientMutex)
+                {
+                    _connectedClients.Remove(netSocket);
+                    Debug.Log("Client " + netSocket.userName + " has disconnected. Adiós aweonao");
+                    break;
+                }
+            }
+
+            foreach (var client in _connectedClients)
+            {
+                client.socket.Send(data);
+            }
+
+            string chatMessage = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log(chatMessage);
         }
     }
 
@@ -120,6 +145,8 @@ public class TCPServer : MonoBehaviour
 
         _refreshList = false;
     }
+
+    
 
     private void OnDestroy()
     {

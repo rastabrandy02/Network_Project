@@ -68,7 +68,7 @@ public class TCPClient : MonoBehaviour
             _socket.Connect(_endPoint);
             Debug.Log("Trying to connect to server...");
 
-            _userThread = new Thread(MessageServer);
+            _userThread = new Thread(ServerCommunicate);
             _userThread.Start();
         }
         catch (Exception e)
@@ -78,9 +78,9 @@ public class TCPClient : MonoBehaviour
         }
     }
 
-    void MessageServer()
+    void ServerCommunicate()
     {
-        while (true)
+       //Registering Client
         {
             //Send User Name
             byte[] data = Encoding.ASCII.GetBytes(userName); //converting username to the data which will be sent to the server
@@ -98,10 +98,28 @@ public class TCPClient : MonoBehaviour
             {
                 _savedServerName = serverName;
                 _connected = true;
-            }
-            break;
+            }           
+        }
+        
+        //Chat
+        while (true)
+        {
+            byte[] data = new byte[2048];
+            int recievedBytes = _socket.Receive(data);
+
+            string chatMessage = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            Debug.Log(chatMessage);
         }
     }
+
+    public void SendMessage()
+    {
+        ChatMessage message = new ChatMessage("Sexoooo", userName, DateTime.Now.ToString("dd/MM hh:mm"));
+        string jsonMessage = JsonUtility.ToJson(message);
+
+        _socket.Send(Encoding.ASCII.GetBytes(jsonMessage));
+    }
+
 
     private void OnDestroy()
     {
