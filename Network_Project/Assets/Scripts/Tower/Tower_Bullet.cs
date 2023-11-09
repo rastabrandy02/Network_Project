@@ -50,5 +50,6 @@ public class Tower_Bullet : MonoBehaviour
         {
             collision.gameObject.GetComponent<Melee_Enemy>().TakeDamage(damage);
         }
+        Destroy(gameObject);
     }
 }

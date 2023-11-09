@@ -14,6 +14,8 @@ public class Melee_Enemy : MonoBehaviour
 
     int pathPointIndex = 0;
     float health;
+    float distanceTraveled;
+    Vector3 lastPos;
     bool isAlive = true;
 
 
@@ -26,8 +28,10 @@ public class Melee_Enemy : MonoBehaviour
 
         state = FollowPath;      
         pathTarget = pathPoints[pathPointIndex];
+        lastPos = transform.position;
+
         StartCoroutine(CheckDistance());
-        
+        StartCoroutine(UpdateTraveledDistance());
     }
 
     // Update is called once per frame
@@ -64,6 +68,16 @@ public class Melee_Enemy : MonoBehaviour
         }
         
     }
+    IEnumerator UpdateTraveledDistance()
+    {
+        while(isAlive) 
+        {
+            distanceTraveled += Vector2.Distance(transform.position, lastPos);
+            lastPos = transform.position;
+            yield return new WaitForSeconds(0.1f);
+        
+        }
+    }
 
     public void SetPath(Transform[] path)
     {
@@ -73,4 +87,17 @@ public class Melee_Enemy : MonoBehaviour
     {
         health-=damage;
     }
+    public float GetHealth()
+    {
+        return health; 
+    }
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+    public float GetDistanceTraveled()
+    { 
+        return distanceTraveled; 
+    }
 }
+
