@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Enemy_Spawner : MonoBehaviour
 {
-
+    
     [SerializeField] GameObject meleeEnemy;
     [SerializeField] float timeBetweenSpawns;
+    [SerializeField] bool canSpawn;
     [SerializeField] Transform[] pathPoints;
     int waveLevel = 1;
 
@@ -23,6 +24,7 @@ public class Enemy_Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canSpawn) return;
         if (Time.time > nextSpawn)
         {
             SpawnEnemies(meleeEnemy, numberOfEnemiesToSpawn);

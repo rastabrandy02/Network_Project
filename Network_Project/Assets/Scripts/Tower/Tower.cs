@@ -58,7 +58,7 @@ public class Tower : MonoBehaviour
                 if (target != null) 
                 {
                     RotateTurret();
-                    //state = Attack;
+                    state = Attack;
                 }
                 else
                 {
@@ -67,7 +67,7 @@ public class Tower : MonoBehaviour
                 }
                
             }
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
         }
         
     }
