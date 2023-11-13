@@ -118,6 +118,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -320,7 +332,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Wind Blowing_0: -4922017028865471248
+      Wind Blowing_1: 8668170552836776915
+      Wind Blowing_2: 9068961487736968856
+      Wind Blowing_3: 7103454044093712999
+      Wind Blowing_4: -1524676185454068834
+      Wind Blowing_5: 1554237559560488518
+      Wind Blowing_6: 3885490533125397609
+      Wind Blowing_7: 3162134265758766160
+      Wind Blowing_8: -7314063351203895713
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

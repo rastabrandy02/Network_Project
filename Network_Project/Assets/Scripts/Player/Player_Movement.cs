@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
     [SerializeField] float acceleration;
-    [SerializeField] float deceleration;
     [SerializeField] float maxSpeed;
     [SerializeField] Rigidbody2D rb;
 
@@ -18,6 +18,8 @@ public class Player_Movement : MonoBehaviour
 
     void Update()
     {
+        movVec = Vector2.zero;
+
         if (Input.GetKey(KeyCode.D))
         {
             movVec.x = acceleration;
@@ -37,8 +39,7 @@ public class Player_Movement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Move(movVec);
-        Decelerate();
+        Move(movVec);       
     }
 
     void Move(Vector2 movement)
@@ -47,8 +48,5 @@ public class Player_Movement : MonoBehaviour
                        
         rb.velocity += movement;              
     }
-    void Decelerate()
-    {
-        Debug.Log(rb.velocity);
-    }
+   
 }

@@ -121,6 +121,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -344,7 +356,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Tower 08 - Level 01 - Weapon_0: 76359066163611204
+      Tower 08 - Level 01 - Weapon_1: 3858108384848761369
+      Tower 08 - Level 01 - Weapon_2: -5131340725728897515
+      Tower 08 - Level 01 - Weapon_3: 308882240766129176
+      Tower 08 - Level 01 - Weapon_4: 641589583452900872
+      Tower 08 - Level 01 - Weapon_5: 745078443809957149
+      Tower 08 - Level 01 - Weapon_6: 2326068357681266134
+      Tower 08 - Level 01 - Weapon_7: -5226895340404001257
+      Tower 08 - Level 01 - Weapon_8: 3877671651545555371
+      Tower 08 - Level 01 - Weapon_9: 7033380230818582453
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

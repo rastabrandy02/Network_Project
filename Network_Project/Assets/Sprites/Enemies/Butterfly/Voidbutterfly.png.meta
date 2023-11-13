@@ -319,6 +319,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1928,7 +1940,83 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Voidbutterfly_0: -5472273549016121137
+      Voidbutterfly_1: -4015175210057102330
+      Voidbutterfly_10: -8360266958406345616
+      Voidbutterfly_11: -7077010170282039424
+      Voidbutterfly_12: -7624474253765351595
+      Voidbutterfly_13: 7017793610897006746
+      Voidbutterfly_14: 3837759553136613693
+      Voidbutterfly_15: -3422489029345450606
+      Voidbutterfly_16: -7147598683780815622
+      Voidbutterfly_17: -2557905327700558700
+      Voidbutterfly_18: 4199437785346413852
+      Voidbutterfly_19: -4433460907029468958
+      Voidbutterfly_2: 177857317360085201
+      Voidbutterfly_20: -5614174602967409814
+      Voidbutterfly_21: -642765704206745390
+      Voidbutterfly_22: -8943509208270896973
+      Voidbutterfly_23: 9006212136663870181
+      Voidbutterfly_24: -6634804408513838044
+      Voidbutterfly_25: 8372299674836673871
+      Voidbutterfly_26: -5820559084496174411
+      Voidbutterfly_27: -2261737650030646026
+      Voidbutterfly_28: 6278843098230132668
+      Voidbutterfly_29: 5342491762052321695
+      Voidbutterfly_3: 3499113253005080055
+      Voidbutterfly_30: 2493400874617291992
+      Voidbutterfly_31: -7374604733239819089
+      Voidbutterfly_32: -2676553718673764490
+      Voidbutterfly_33: 7254770005016180967
+      Voidbutterfly_34: 3131343659494377354
+      Voidbutterfly_35: 4960696811619075164
+      Voidbutterfly_36: -6403187922105598539
+      Voidbutterfly_37: -7368390234227671534
+      Voidbutterfly_38: 5576694474321809402
+      Voidbutterfly_39: 317488539130461093
+      Voidbutterfly_4: 5553497607247494106
+      Voidbutterfly_40: 8296713967768490986
+      Voidbutterfly_41: 20239680957033999
+      Voidbutterfly_42: 1683434799526457563
+      Voidbutterfly_43: 127769043675252436
+      Voidbutterfly_44: -4972945015346781748
+      Voidbutterfly_45: -3227538131591885834
+      Voidbutterfly_46: 7359253532533126236
+      Voidbutterfly_47: -7236390955397772635
+      Voidbutterfly_48: 4409537324399810200
+      Voidbutterfly_49: -3158792701218497176
+      Voidbutterfly_5: 783355395922869477
+      Voidbutterfly_50: 4838974691541575467
+      Voidbutterfly_51: 6465020980055660286
+      Voidbutterfly_52: -5483942026228047247
+      Voidbutterfly_53: 6464447675280983373
+      Voidbutterfly_54: -4684970140052649242
+      Voidbutterfly_55: 8575418193074934776
+      Voidbutterfly_56: 3925865422596161528
+      Voidbutterfly_57: -556685612446965127
+      Voidbutterfly_58: 7526683690043326794
+      Voidbutterfly_59: 6341503674316002977
+      Voidbutterfly_6: -848302766907711877
+      Voidbutterfly_60: -7114159080641346638
+      Voidbutterfly_61: 4586813940516468339
+      Voidbutterfly_62: -7866945082641141927
+      Voidbutterfly_63: -1379028353622355431
+      Voidbutterfly_64: 4740459169350071283
+      Voidbutterfly_65: 4263102331897678932
+      Voidbutterfly_66: 4564160275699824642
+      Voidbutterfly_67: -1440123356962317343
+      Voidbutterfly_68: -7180533562051577176
+      Voidbutterfly_69: -6404821065946191553
+      Voidbutterfly_7: 9001164272326380687
+      Voidbutterfly_70: 4394347016002021900
+      Voidbutterfly_71: -1678376478436233055
+      Voidbutterfly_72: -1618014072130310354
+      Voidbutterfly_73: 7927442205047459601
+      Voidbutterfly_74: 4947238104053160545
+      Voidbutterfly_75: 5069058131246567835
+      Voidbutterfly_8: 582813161061785423
+      Voidbutterfly_9: -4312384552118779282
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

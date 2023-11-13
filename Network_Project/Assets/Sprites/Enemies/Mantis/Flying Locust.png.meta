@@ -397,6 +397,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -2552,7 +2564,109 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Flying Locust_0: -4465641852323624721
+      Flying Locust_1: -4238367412281005074
+      Flying Locust_10: -1916632289654186578
+      Flying Locust_100: 8415932152442984439
+      Flying Locust_101: -6226148474481197451
+      Flying Locust_11: 6678828903202514402
+      Flying Locust_12: 3062796343697842211
+      Flying Locust_13: 7641613228215284927
+      Flying Locust_14: -2618066800549296987
+      Flying Locust_15: -8175828246914924405
+      Flying Locust_16: -1163932735546404605
+      Flying Locust_17: 5061997604705562025
+      Flying Locust_18: -7833970142668237880
+      Flying Locust_19: -9096061053693847894
+      Flying Locust_2: -1725497383959587987
+      Flying Locust_20: -1396361885939607317
+      Flying Locust_21: -3900737004914872049
+      Flying Locust_22: 9106135132967015521
+      Flying Locust_23: 4068288896657698148
+      Flying Locust_24: 4935732925144628825
+      Flying Locust_25: 3250565036925618146
+      Flying Locust_26: -7320282427197846261
+      Flying Locust_27: 3274096252438299988
+      Flying Locust_28: -8917062708956165692
+      Flying Locust_29: 4007284563497996931
+      Flying Locust_3: -2976021313854836361
+      Flying Locust_30: -1527305812682711824
+      Flying Locust_31: 501988772665428506
+      Flying Locust_32: -8642652917899186246
+      Flying Locust_33: -4547861654895018506
+      Flying Locust_34: -9073024216037004050
+      Flying Locust_35: -2595810892507060804
+      Flying Locust_36: -1011497060201426370
+      Flying Locust_37: -3469092965049897440
+      Flying Locust_38: -1676380405523907567
+      Flying Locust_39: 6337801615406246328
+      Flying Locust_4: -4792116147516858344
+      Flying Locust_40: 8297957848484527170
+      Flying Locust_41: 1294014193543778754
+      Flying Locust_42: -8502042920139459654
+      Flying Locust_43: -1328895532094322155
+      Flying Locust_44: -6468045519621754365
+      Flying Locust_45: 50674168460542229
+      Flying Locust_46: -8112389111901524561
+      Flying Locust_47: 3856130800698003291
+      Flying Locust_48: -2713797413548210838
+      Flying Locust_49: 4622650006988732906
+      Flying Locust_5: -2432503486145888026
+      Flying Locust_50: -5276810549752173019
+      Flying Locust_51: -7409978932470104517
+      Flying Locust_52: 7101605782362813425
+      Flying Locust_53: -5621982741700406387
+      Flying Locust_54: 8458224060919645126
+      Flying Locust_55: 5308469260103326938
+      Flying Locust_56: 8490078807222232409
+      Flying Locust_57: 3213085199320752109
+      Flying Locust_58: -386505331319566883
+      Flying Locust_59: -2954984301560913668
+      Flying Locust_6: -7986626968436063036
+      Flying Locust_60: -8932903911929251055
+      Flying Locust_61: 902221852880125546
+      Flying Locust_62: -7971502826400875024
+      Flying Locust_63: -3738689082532131327
+      Flying Locust_64: -1209268334386916256
+      Flying Locust_65: -2927128757650502082
+      Flying Locust_66: -8752317633369043601
+      Flying Locust_67: 3599612881344226628
+      Flying Locust_68: -7066207906192422742
+      Flying Locust_69: -1498110544798960573
+      Flying Locust_7: -1191294722005592454
+      Flying Locust_70: -3055168858932151356
+      Flying Locust_71: -2954345130311734018
+      Flying Locust_72: -6040798063325640850
+      Flying Locust_73: 5011030442841049281
+      Flying Locust_74: -6032653447717604104
+      Flying Locust_75: 8899795607804823065
+      Flying Locust_76: -5947546312657830360
+      Flying Locust_77: 5251126025241212499
+      Flying Locust_78: -1508359945423447087
+      Flying Locust_79: -4368339183792760168
+      Flying Locust_8: 7662519945289731522
+      Flying Locust_80: -7016946206396680710
+      Flying Locust_81: -2209463516024761874
+      Flying Locust_82: 342573929386912678
+      Flying Locust_83: 3630443727158400112
+      Flying Locust_84: 878593331773288275
+      Flying Locust_85: 197376547858155068
+      Flying Locust_86: 7946743513943089597
+      Flying Locust_87: -6834262187069842321
+      Flying Locust_88: 5143910632064512233
+      Flying Locust_89: -6024810101266429265
+      Flying Locust_9: 7459050462123760745
+      Flying Locust_90: -759465096926755383
+      Flying Locust_91: 3130662984185558938
+      Flying Locust_92: 7501074241694751414
+      Flying Locust_93: -954090660091742172
+      Flying Locust_94: 7058024828107318646
+      Flying Locust_95: -4814187823350684419
+      Flying Locust_96: 5411909644030738777
+      Flying Locust_97: 6589699706815065864
+      Flying Locust_98: 8452398248296507357
+      Flying Locust_99: -291719401962578265
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

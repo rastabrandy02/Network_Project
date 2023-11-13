@@ -478,6 +478,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -3200,7 +3212,136 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Clampbeetle_0: 3251691370361288316
+      Clampbeetle_1: 7942135531509008930
+      Clampbeetle_10: 4570010595554129375
+      Clampbeetle_100: 2024966712157936831
+      Clampbeetle_101: -2384040164727244668
+      Clampbeetle_102: -1322806837809382498
+      Clampbeetle_103: -7283859366984430064
+      Clampbeetle_104: -399861842620120721
+      Clampbeetle_105: -6596967035058048286
+      Clampbeetle_106: 6511618984616201014
+      Clampbeetle_107: -409870692109587121
+      Clampbeetle_108: -3606409710103143604
+      Clampbeetle_109: -7497275797586854632
+      Clampbeetle_11: 2009580132192688398
+      Clampbeetle_110: -3871740961226084693
+      Clampbeetle_111: -7016182030150824730
+      Clampbeetle_112: -6478595688555802570
+      Clampbeetle_113: 4414729476046799251
+      Clampbeetle_114: 8404863584424890800
+      Clampbeetle_115: 7195725243254831126
+      Clampbeetle_116: -5704526358491592109
+      Clampbeetle_117: -4084464696450302186
+      Clampbeetle_118: 4060255031355829385
+      Clampbeetle_119: -6532691289613389951
+      Clampbeetle_12: 6963441445942291886
+      Clampbeetle_120: 3537310433381303880
+      Clampbeetle_121: 228802420930154464
+      Clampbeetle_122: 3737408329742987953
+      Clampbeetle_123: -9131961070038069843
+      Clampbeetle_124: 2514164485140914076
+      Clampbeetle_125: 910190285281215693
+      Clampbeetle_126: -4602869051174112544
+      Clampbeetle_127: -1031917874940560195
+      Clampbeetle_128: 3731757262572752001
+      Clampbeetle_13: -3011520461092501254
+      Clampbeetle_14: -91781687664461767
+      Clampbeetle_15: -1828015138040312004
+      Clampbeetle_16: 8861095672371677961
+      Clampbeetle_17: -6555030889039792078
+      Clampbeetle_18: 7180121689052687005
+      Clampbeetle_19: -4952832395464197281
+      Clampbeetle_2: -5995648312414683181
+      Clampbeetle_20: 2628020886092035985
+      Clampbeetle_21: 7857319822734659123
+      Clampbeetle_22: -6521055994334348929
+      Clampbeetle_23: 6846235428036142117
+      Clampbeetle_24: -3762341001814862026
+      Clampbeetle_25: 1762076786707946115
+      Clampbeetle_26: -7491772181988157025
+      Clampbeetle_27: -709046183233191808
+      Clampbeetle_28: -995726736582902970
+      Clampbeetle_29: 1747440484675541337
+      Clampbeetle_3: -81462015635835091
+      Clampbeetle_30: -885908043738320413
+      Clampbeetle_31: 9146676360164635596
+      Clampbeetle_32: 171719211859902839
+      Clampbeetle_33: -6094637673263006354
+      Clampbeetle_34: 1293860953854494243
+      Clampbeetle_35: -7333165006441957246
+      Clampbeetle_36: 3129291354381546857
+      Clampbeetle_37: 305421454080182814
+      Clampbeetle_38: -6218492062104936236
+      Clampbeetle_39: 4663999623758188369
+      Clampbeetle_4: -4046756281507552662
+      Clampbeetle_40: 3349425694957723806
+      Clampbeetle_41: -620439131525759188
+      Clampbeetle_42: -549710631639701812
+      Clampbeetle_43: 4448361429273740093
+      Clampbeetle_44: -4740011231161718194
+      Clampbeetle_45: -7763023839064402950
+      Clampbeetle_46: 8268603462514791202
+      Clampbeetle_47: 3911792372836352386
+      Clampbeetle_48: -8157494227955167637
+      Clampbeetle_49: 543978484246213732
+      Clampbeetle_5: 7068642135114370036
+      Clampbeetle_50: 6899886222307187821
+      Clampbeetle_51: -7226557576362067138
+      Clampbeetle_52: -9043885279694503176
+      Clampbeetle_53: -5955602666417933324
+      Clampbeetle_54: 7812114858702341304
+      Clampbeetle_55: 113077334844843534
+      Clampbeetle_56: -8693865220760198528
+      Clampbeetle_57: 5509577089978507713
+      Clampbeetle_58: 1731196776713437756
+      Clampbeetle_59: 981594195258592929
+      Clampbeetle_6: 26330686907990948
+      Clampbeetle_60: 5403538596180497225
+      Clampbeetle_61: 3054624827238796984
+      Clampbeetle_62: -1193151165026712802
+      Clampbeetle_63: 4242026542016415830
+      Clampbeetle_64: -7476705122225442271
+      Clampbeetle_65: 4730311896419979087
+      Clampbeetle_66: -7680408686039542428
+      Clampbeetle_67: -4795088491880463360
+      Clampbeetle_68: -8298277785245284483
+      Clampbeetle_69: 1207300928643625934
+      Clampbeetle_7: 7083344944260002606
+      Clampbeetle_70: 908173649798093329
+      Clampbeetle_71: -8482715111051138624
+      Clampbeetle_72: -3194353534872995338
+      Clampbeetle_73: -6670026175004802718
+      Clampbeetle_74: 8641547468313910756
+      Clampbeetle_75: 7406733087486861739
+      Clampbeetle_76: 6155777229571293903
+      Clampbeetle_77: 8910457377124294553
+      Clampbeetle_78: 6943522659799157500
+      Clampbeetle_79: -5317551495947052363
+      Clampbeetle_8: -9218360902473858725
+      Clampbeetle_80: 5952181396253239472
+      Clampbeetle_81: -6765958715438624012
+      Clampbeetle_82: -457012719415368929
+      Clampbeetle_83: -1973654689445264319
+      Clampbeetle_84: -3998155258819806575
+      Clampbeetle_85: -1238911212660400292
+      Clampbeetle_86: -1488690950444670705
+      Clampbeetle_87: 9186827849437532157
+      Clampbeetle_88: 1437391131781237239
+      Clampbeetle_89: -3339934208273659572
+      Clampbeetle_9: 7353802360472285286
+      Clampbeetle_90: 4256239459918868241
+      Clampbeetle_91: 8634177627018160363
+      Clampbeetle_92: 3305905179215485180
+      Clampbeetle_93: -4289155426919287605
+      Clampbeetle_94: -3929176208743024250
+      Clampbeetle_95: -2989578278517901440
+      Clampbeetle_96: -1642532647153777527
+      Clampbeetle_97: -6340908649637251939
+      Clampbeetle_98: 823468785296598380
+      Clampbeetle_99: -6738997840628304601
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

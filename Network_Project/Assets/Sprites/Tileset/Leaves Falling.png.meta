@@ -130,6 +130,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -416,7 +428,20 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Leaves Falling_0: 5169166268825446079
+      Leaves Falling_1: 4938497883460586183
+      Leaves Falling_10: 4571834050928493383
+      Leaves Falling_11: 1850214536395730012
+      Leaves Falling_12: 1704735013397993676
+      Leaves Falling_2: -302409833923388170
+      Leaves Falling_3: 2966582341690619986
+      Leaves Falling_4: -5011957708767865819
+      Leaves Falling_5: 8099554973976478607
+      Leaves Falling_6: -1754912496248319994
+      Leaves Falling_7: -2560386804383876714
+      Leaves Falling_8: 9172732523701412088
+      Leaves Falling_9: 2288061904156885097
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

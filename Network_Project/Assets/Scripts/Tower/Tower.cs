@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Tower : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class Tower : MonoBehaviour
     [SerializeField] float damage;
     [SerializeField] float detectionRange;
     [SerializeField] float turretRotationSpeed;
+    [SerializeField] int attackAngle;
     [SerializeField] float bulletSpeed;
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject bullet;
@@ -16,22 +19,21 @@ public class Tower : MonoBehaviour
     float nextAttack;
     GameObject target;
 
-    bool isDetecting;
+    bool isDetecting = true;
    
 
     delegate void State();
     State state;
     void Start()
     {
-        isDetecting = true;
+        state = Idle;
        StartCoroutine(CheckTarget());
        
     }
 
     
     void Update()
-    {
-        
+    {       
         state();
     }
 
@@ -52,13 +54,13 @@ public class Tower : MonoBehaviour
                     {
                         target = collisions[i].gameObject;
                         biggestDistanceTravelled = currentDistanceTraveled;
+                        
                     }
                 }
 
                 if (target != null) 
                 {
-                    RotateTurret();
-                    state = Attack;
+                    RotateTower();                    
                 }
                 else
                 {
@@ -71,13 +73,18 @@ public class Tower : MonoBehaviour
         }
         
     }
-    void RotateTurret()
+    void RotateTower()
     {
+        //Rotate body towards target
         Vector3 direction = target.transform.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f;
         Quaternion finalRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, angle), turretRotationSpeed * Time.deltaTime);
         transform.rotation = finalRotation;
-        
+
+       //Check if target is inside the allowed attack area of the tower
+        float lookingAngle = Vector2.Angle(transform.up.normalized, direction.normalized);
+        if (lookingAngle <= attackAngle) state = Attack;
+        else state = Idle;
     }
     void Idle()
     {

@@ -193,7 +193,6 @@ GameObject:
   - component: {fileID: 1209618656}
   - component: {fileID: 1209618655}
   - component: {fileID: 1209618654}
-  - component: {fileID: 1209618657}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -295,52 +294,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1209618657
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209618653}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!1 &1254910755
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,8 +395,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1051817991592321449, guid: e9cd7edfb35417141af813c1068e7b2c, type: 3}
+      propertyPath: attackAngle
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051817991592321449, guid: e9cd7edfb35417141af813c1068e7b2c, type: 3}
+      propertyPath: bulletSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051817991592321449, guid: e9cd7edfb35417141af813c1068e7b2c, type: 3}
       propertyPath: turretRotationSpeed
-      value: 40
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1147949678955642466, guid: e9cd7edfb35417141af813c1068e7b2c, type: 3}
       propertyPath: m_Name
@@ -586,7 +547,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 0.1
-  deceleration: 0.1
   maxSpeed: 2
   rb: {fileID: 1714579738}
 --- !u!50 &1714579738
@@ -602,7 +562,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 5
+  m_LinearDrag: 2.5
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -615,7 +575,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &1714579739
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -809,7 +769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7485808428037717685, guid: 17ddf558adcba6945ad181d227015076, type: 3}
       propertyPath: canSpawn
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7485808428037717685, guid: 17ddf558adcba6945ad181d227015076, type: 3}
       propertyPath: timeBetweenSpawns
