@@ -9,16 +9,20 @@ public class Enemy_Spawner : MonoBehaviour
     [SerializeField] float timeBetweenSpawns;
     [SerializeField] bool canSpawn;
     [SerializeField] Transform[] pathPoints;
+    [SerializeField] Player_Stats targetPlayer;
+
     int waveLevel = 1;
 
     float nextSpawn;
     int currentWave;
     int numberOfEnemiesToSpawn;
 
+    Enemy_Manager enemyManager;
 
     void Start()
     {
         numberOfEnemiesToSpawn = waveLevel;
+        enemyManager = GetComponent<Enemy_Manager>();
     }
 
     // Update is called once per frame
@@ -43,7 +47,10 @@ public class Enemy_Spawner : MonoBehaviour
         for(int i = 0; i< n; i++) 
         {
             GameObject go = Instantiate(enemy, transform.position, Quaternion.identity);
-            go.GetComponent<Melee_Enemy>().SetPath(pathPoints);
+            Melee_Enemy meleeEnemy = go.GetComponent<Melee_Enemy>();
+            meleeEnemy.SetPath(pathPoints);
+            meleeEnemy.SetTargetPlayer(targetPlayer);
+            meleeEnemy.SetManager(enemyManager);
 
 
         }

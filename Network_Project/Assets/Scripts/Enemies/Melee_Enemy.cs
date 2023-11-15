@@ -7,7 +7,10 @@ public class Melee_Enemy : MonoBehaviour
     [SerializeField] float maxHealth;
     [SerializeField] float speed;
     [SerializeField] float minDistanceToTarget;
-
+    [SerializeField] int enemyValue;
+    
+    Player_Stats targetPlayer;
+    Enemy_Manager enemyManager;
 
     Transform[] pathPoints;
     Transform pathTarget;
@@ -24,6 +27,7 @@ public class Melee_Enemy : MonoBehaviour
 
     void Start()
     {
+        
         health = maxHealth;
 
         state = FollowPath;      
@@ -51,6 +55,7 @@ public class Melee_Enemy : MonoBehaviour
     void Die()
     {
         isAlive = false;
+        enemyManager.EnemyDead(enemyValue, targetPlayer);
         Destroy(gameObject);
     }
     IEnumerator CheckDistance()
@@ -82,6 +87,14 @@ public class Melee_Enemy : MonoBehaviour
     public void SetPath(Transform[] path)
     {
         pathPoints = path;
+    }
+    public void SetTargetPlayer(Player_Stats targetPlayer)
+    {
+        this.targetPlayer = targetPlayer;
+    }
+    public void SetManager(Enemy_Manager manager)
+    {
+        enemyManager = manager;
     }
     public void TakeDamage(float damage)
     {

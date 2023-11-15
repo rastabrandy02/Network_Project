@@ -383,6 +383,9 @@ MonoBehaviour:
   maxHealth: 3
   speed: 0.5
   minDistanceToTarget: 0.3
+  enemyValue: 1
+  targetPlayer: {fileID: 0}
+  enemyManager: {fileID: 0}
 --- !u!61 &945945509899379389
 BoxCollider2D:
   m_ObjectHideFlags: 0
