@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2832059861999663236}
-  - component: {fileID: 7485808428037717685}
   - component: {fileID: 9127097609285992025}
+  - component: {fileID: 2402780903573652225}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -33,25 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7485808428037717685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1780331100965616999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c1ac5ec2c1a63e4d9455d2658640ef9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meleeEnemy: {fileID: 6470821239516548024, guid: 44b5a4f2bbf49a446bea22aa21a5f94e, type: 3}
-  timeBetweenSpawns: 2
-  canSpawn: 0
-  pathPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &9127097609285992025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,3 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67987c28582ff10498a3c8b5bf6b5bca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2402780903573652225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780331100965616999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f11cfac9fb76e40894097e9fd32f46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinsTMP: {fileID: 0}
+  player_Stats: {fileID: 0}

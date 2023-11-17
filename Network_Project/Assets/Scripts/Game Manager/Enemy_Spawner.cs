@@ -10,6 +10,7 @@ public class Enemy_Spawner : MonoBehaviour
     [SerializeField] bool canSpawn;
     [SerializeField] Transform[] pathPoints;
     [SerializeField] Player_Stats targetPlayer;
+    [SerializeField] Enemy_Manager enemyManager;
 
     int waveLevel = 1;
 
@@ -17,12 +18,12 @@ public class Enemy_Spawner : MonoBehaviour
     int currentWave;
     int numberOfEnemiesToSpawn;
 
-    Enemy_Manager enemyManager;
+    
 
     void Start()
     {
         numberOfEnemiesToSpawn = waveLevel;
-        enemyManager = GetComponent<Enemy_Manager>();
+        
     }
 
     // Update is called once per frame
