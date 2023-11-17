@@ -1,26 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Melee_Enemy : MonoBehaviour
 {
     [SerializeField] float maxHealth;
-    [SerializeField] float speed;
+    [SerializeField] float maxSpeed;
+    [SerializeField] float acceleration;
     [SerializeField] float minDistanceToTarget;
+    [SerializeField] float attackSpeed;
+    [SerializeField] float damage;
     [SerializeField] int enemyValue;
-    
+    [SerializeField]Healthbar healthbar;
+
     Player_Stats targetPlayer;
     Enemy_Manager enemyManager;
 
     Transform[] pathPoints;
     Transform pathTarget;
 
-    int pathPointIndex = 0;
     float health;
-    float distanceTraveled;
-    Vector3 lastPos;
     bool isAlive = true;
 
+    int pathPointIndex = 0;  
+    float distanceTraveled;
+    Vector3 lastPos;
+
+    float timeSinceLastHit = 0.0f;
+   
+    Rigidbody2D rb;
 
     delegate void State();
     State state;
@@ -29,6 +38,7 @@ public class Melee_Enemy : MonoBehaviour
     {
         
         health = maxHealth;
+        rb = GetComponent<Rigidbody2D>();
 
         state = FollowPath;      
         pathTarget = pathPoints[pathPointIndex];
@@ -38,9 +48,10 @@ public class Melee_Enemy : MonoBehaviour
         StartCoroutine(UpdateTraveledDistance());
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    void FixedUpdate()
     {
+        healthbar.SetHealth(health, maxHealth);
         state();
         if(health <= 0)
         {
@@ -50,7 +61,11 @@ public class Melee_Enemy : MonoBehaviour
 
     void FollowPath()
     {
-        transform.position += new Vector3(pathTarget.position.x - transform.position.x, pathTarget.position.y - transform.position.y, 0.0f) * speed * Time.deltaTime;
+        if(rb.velocity.magnitude < maxSpeed)
+        {
+            Vector2 direction = (pathTarget.position - transform.position).normalized;
+            rb.velocity += direction * acceleration;
+        }
     }
     void Die()
     {
@@ -111,6 +126,19 @@ public class Melee_Enemy : MonoBehaviour
     public float GetDistanceTraveled()
     { 
         return distanceTraveled; 
+    }
+    
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Base"))
+        {
+            timeSinceLastHit += Time.deltaTime;
+            if(timeSinceLastHit >= attackSpeed)
+            {
+                collision.gameObject.GetComponent<Player_Base>().TakeDamage(damage);
+                timeSinceLastHit = 0;
+            }
+        }
     }
 }
 
