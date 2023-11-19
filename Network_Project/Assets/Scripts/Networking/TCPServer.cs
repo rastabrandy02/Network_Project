@@ -9,14 +9,12 @@ using System.Threading;
 
 public class TCPServer : MonoBehaviour
 {
-    private Thread _acceptThread;
     private EndPoint _endPoint;
-    private Socket _socket;
+    private NetSocket _socket;
     private int _port = 6969;
 
     private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
     private List<NetworkSocket> _connectedClients = new List<NetworkSocket>();
-    private List<Thread> _clientThreads = new List<Thread>();
 
     public TMPro.TextMeshProUGUI IPText;
     public TMPro.TextMeshProUGUI clientsText;
@@ -38,14 +36,13 @@ public class TCPServer : MonoBehaviour
     {
         //Create & bind endpoint and socket
         _endPoint = new IPEndPoint(IPAddress.Any, _port);
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        _socket.Bind(_endPoint);
+        _socket = new NetSocket("Mongolia", ConnectionType.Server, StreamType.TCP, (IPEndPoint)_endPoint);
+
 
         Debug.Log("Created server, listenig on port " + _port);
-        _socket.Listen(10);
-
-        _acceptThread = new Thread(AcceptConnections);
-        _acceptThread.Start();
+        TcpListener listener = (TcpListener)_socket.socket;
+        listener.Start();
+        listener.BeginAcceptTcpClient(new AsyncCallback(AcceptConnections), new StateObject(_socket));
 
     }
 
@@ -65,73 +62,74 @@ public class TCPServer : MonoBehaviour
         IPText.text = "IP: " + hostIP.ToString();
     }
 
-    void AcceptConnections()
+    void AcceptConnections(IAsyncResult AR)
     {
-        while (true)
-        {
-            Socket client = _socket.Accept();
-            Debug.Log("A client has connected! \nIP: " + client.RemoteEndPoint + ", Port: " + _port);
+        StateObject stateObject = (StateObject)AR.AsyncState;
+        NetSocket netSocket = stateObject.socket;
+        TcpListener listener = (TcpListener)netSocket.socket;
 
-            NetworkSocket netSocket = new NetworkSocket("Default", client, client.RemoteEndPoint);
+        //accept connection
+        TcpClient client = listener.EndAcceptTcpClient(AR);
+        Debug.Log("A client has connected! \nIP: " + client.Client.RemoteEndPoint + ", Port: " + _port);
 
-            Thread clientThread = new Thread(() => RecieveMessage(netSocket));
+        //Create empty socket and fill with client data
+        NetSocket clientNetSocket = new NetSocket();
+        clientNetSocket.socket = client;
+        clientNetSocket.streamType = StreamType.TCP;
+        clientNetSocket.connectionType = ConnectionType.Client;
 
-            lock (_clientMutex) //locking so other threads don't access the variables
-            {
-                _connectedClients.Add(netSocket);
-                _clientThreads.Add(clientThread);
-            }
+        //listen for connected client data
+        StateObject clientState = new StateObject(clientNetSocket);
+        listener.Server.BeginReceive(clientState.buffer, 0, 2048, 0, new AsyncCallback (RecieveMessage), clientState);
+        
+        //continue listening for future client connections
+        listener.BeginAcceptTcpClient(new AsyncCallback(AcceptConnections), stateObject);
 
-            clientThread.Start();
-        }
     }
 
-    void RecieveMessage(NetworkSocket netSocket)
+    void RecieveMessage(IAsyncResult AR)
     {
+        StateObject stateObject = (StateObject)AR.AsyncState;
+        NetSocket netSocket = stateObject.socket;
+        TcpListener listener = (TcpListener)netSocket.socket;
         //Registering Client
         {
             //Recieve User Name
-            byte[] data = new byte[2048];
-            int recievedBytes = netSocket.socket.Receive(data);
+            int recievedBytes = listener.Server.EndReceive(AR);
 
-            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
+            string userName = Encoding.ASCII.GetString(stateObject.buffer, 0, recievedBytes);
             Debug.Log("User Name is: " + userName);
 
             netSocket.userName = userName;
 
 
             _refreshList = true;
-
-
-            //Send Server Name
-            data = Encoding.ASCII.GetBytes("John Server Inventor de los Servers");
-            netSocket.socket.Send(data);
         }
 
         //Recieving Chat Messages
-        while (true)
-        {
-            byte[] data = new byte[2048];
-            int recievedBytes = netSocket.socket.Receive(data);
+        //while (true)
+        //{
+        //    byte[] data = new byte[2048];
+        //   int recievedBytes = netSocket.socket.Client.Receive(data);
 
-            if (recievedBytes == 0)
-            {
-                lock (_clientMutex)
-                {
-                    _connectedClients.Remove(netSocket);
-                    Debug.Log("Client " + netSocket.userName + " has disconnected. Adiós aweonao");
-                    break;
-                }
-            }
+        //    if (recievedBytes == 0)
+        //    {
+        //        lock (_clientMutex)
+        //        {
+        //            _connectedClients.Remove(netSocket);
+        //            Debug.Log("Client " + netSocket.userName + " has disconnected. Adiós aweonao");
+        //            break;
+        //        }
+        //    }
 
-            foreach (var client in _connectedClients)
-            {
-                client.socket.Send(data);
-            }
+        //    foreach (var client in _connectedClients)
+        //    {
+        //        client.socket.Send(data);
+        //    }
 
-            string chatMessage = Encoding.ASCII.GetString(data, 0, recievedBytes);
-            Debug.Log(chatMessage);
-        }
+        //    string chatMessage = Encoding.ASCII.GetString(data, 0, recievedBytes);
+        //    Debug.Log(chatMessage);
+        //}
     }
 
     void RefreshList()
@@ -146,38 +144,11 @@ public class TCPServer : MonoBehaviour
         _refreshList = false;
     }
 
-    
+
 
     private void OnDestroy()
     {
-        //Destroy Threads
-        if (_acceptThread != null)
-        {
-            if (_acceptThread.IsAlive)
-            {
-                _acceptThread.Abort();
-
-            }
-        }
-
-        foreach (var thread in _clientThreads)
-        {
-            if (thread.IsAlive)
-            {
-                thread.Abort();
-            }
-        }
-
-        //Destroy Socket
-        if (_socket != null)
-        {
-            if (_socket.Connected)
-            {
-                _socket.Shutdown(SocketShutdown.Both);
-            }
-
-            _socket.Close();
-        }
+        
     }
 }
 

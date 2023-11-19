@@ -13,7 +13,7 @@ public class UDP_Server : MonoBehaviour
     int port = 9999;
     Thread acceptThread;
     Socket _socket;
-
+    
     private List<NetworkSocket> connectedClients = new List<NetworkSocket>();
     private List<Thread> clientThreads = new List<Thread>();
 
@@ -60,7 +60,7 @@ public class UDP_Server : MonoBehaviour
 
         IPText.text = "IP: " + hostIP.ToString();
     }
-
+    
     void AcceptConnections()
     {
         while (true)

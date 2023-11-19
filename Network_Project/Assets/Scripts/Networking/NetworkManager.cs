@@ -11,16 +11,58 @@ public enum ConnectionType
     Client
 }
 
+public enum StreamType
+{
+    None,
+    TCP,
+    UDP
+}
+
+public class StateObject
+{
+    public NetSocket socket;
+    public byte[] buffer = new byte[2048];
+       public StateObject(NetSocket _socket) 
+    {
+        socket = _socket;
+    }
+}
 public class NetSocket
 {
-    public UdpClient Socket;
-    public string UserName;
-    public ConnectionType ConnectionType;
+    public object socket;
+    public string userName;
+    public ConnectionType connectionType;
+    public StreamType streamType;
 
-    public NetSocket(string name, ConnectionType type)
+    public NetSocket() {}
+    public NetSocket(string name, ConnectionType conType, StreamType _streamType, IPEndPoint endPoint)
     {
-        UserName = name;
-        ConnectionType = type;
+        userName = name;
+        connectionType = conType;
+        streamType = _streamType;
+
+        if (connectionType == ConnectionType.Client)
+        {
+            if (streamType == StreamType.UDP)
+            {
+                socket = new UdpClient();
+            }
+            else
+            {
+                socket = new TcpClient();
+            }
+        }
+        else
+        {
+            if (streamType == StreamType.UDP)
+            {
+               //pal futuro aweonao pinfloi
+            }
+            else
+            {
+                socket = new TcpListener(endPoint);
+            }
+        }
     }
 }
 
@@ -29,14 +71,4 @@ public static class NetworkData
     public const int Port = 9999;
     public static NetSocket NetSocket;       
 
-}
-
-public class NetServerSocket : NetSocket
-{
-    public List<NetSocket> ConnectedClients;
-    public EndPoint ServerEndPoint;
-    public NetServerSocket(string name)
-        : base(name, ConnectionType.Server)
-    {
-    }
 }
