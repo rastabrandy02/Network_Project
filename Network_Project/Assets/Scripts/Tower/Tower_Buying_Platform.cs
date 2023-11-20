@@ -6,6 +6,8 @@ public class Tower_Buying_Platform : MonoBehaviour
 {
     [SerializeField] int towerCost;
     [SerializeField] GameObject tower;
+
+    bool canSpawn = true;
     void Start()
     {
         
@@ -21,11 +23,12 @@ public class Tower_Buying_Platform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            if(Input.GetKey(KeyCode.E))
+            if(Input.GetKey(KeyCode.E) && canSpawn)
             {
                 if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost))
                 {
-                    Instantiate(tower, transform.position, Quaternion.identity);
+                    canSpawn = false;
+                    Instantiate(tower, transform.position, Quaternion.identity);                    
                     Destroy(gameObject);
                 }
                 

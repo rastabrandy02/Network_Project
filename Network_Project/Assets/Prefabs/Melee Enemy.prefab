@@ -381,13 +381,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  maxSpeed: 1
+  maxSpeed: 0.8
   acceleration: 0.1
   minDistanceToTarget: 0.3
   attackSpeed: 0.2
   damage: 1
   enemyValue: 1
-  healthbar: {fileID: 7722471811068670064}
 --- !u!61 &945945509899379389
 BoxCollider2D:
   m_ObjectHideFlags: 0

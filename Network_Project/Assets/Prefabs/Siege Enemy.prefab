@@ -314,7 +314,7 @@ Transform:
   m_Children:
   - {fileID: 4609966988271249761}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &740130676169860465
 SpriteRenderer:
@@ -381,13 +381,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 6
-  maxSpeed: 0.5
+  maxSpeed: 0.3
   acceleration: 0.1
   minDistanceToTarget: 0.3
   attackSpeed: 0.5
   damage: 3
   enemyValue: 0
-  healthbar: {fileID: 3117918913473067445}
 --- !u!61 &2731820653977052186
 BoxCollider2D:
   m_ObjectHideFlags: 0

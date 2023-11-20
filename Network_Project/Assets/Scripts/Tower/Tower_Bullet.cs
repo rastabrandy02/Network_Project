@@ -5,30 +5,35 @@ using UnityEngine;
 public class Tower_Bullet : MonoBehaviour
 {
     [SerializeField] float lifeSpan;
-    
+    [SerializeField] float acceleration;
+
     float speed;
     float damage;
     Vector2 direction;
-    Transform target;
 
     float timeAlive;
+
+    Rigidbody2D rb;
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     
     void Update()
     {
         
-        
-        transform.position += new Vector3(direction.x, direction.y, 0.0f) * speed * Time.deltaTime;
-        
-        
         timeAlive += Time.deltaTime;
         if(timeAlive > lifeSpan) Die();
         
         
+    }
+    void FixedUpdate()
+    {
+        if(rb.velocity.magnitude < speed)
+        {
+            rb.velocity += direction * acceleration;
+        }
     }
 
     void Die()
@@ -37,11 +42,13 @@ public class Tower_Bullet : MonoBehaviour
     }
     public void SetBullet(Transform target, float damage, float speed)
     {
-        this.target = target;
+        rb = GetComponent<Rigidbody2D>();
+
         this.damage = damage;
         this.speed = speed;
 
         direction = (target.position - transform.position).normalized;
+        rb.velocity = direction * acceleration;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

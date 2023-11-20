@@ -93,8 +93,7 @@ public class Tower : MonoBehaviour
     void Attack()
     {
         if (target == null)
-        {
-            
+        {        
             return;
         }
         if(Time.time >= nextAttack && target!= null)
@@ -102,6 +101,7 @@ public class Tower : MonoBehaviour
             nextAttack = Time.time + attackSpeed;
 
             GameObject go = Instantiate(bullet, shootingPoint.position, Quaternion.identity);
+            if (go == null) Debug.Log("NULL");
             go.GetComponent<Tower_Bullet>().SetBullet(target.transform, damage, bulletSpeed);
         }
     }
