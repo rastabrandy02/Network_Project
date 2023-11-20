@@ -13,7 +13,7 @@ public class Player_Stats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space)) GiveCoins(10);
     }
     public int GetCoins()
     {
@@ -23,8 +23,10 @@ public class Player_Stats : MonoBehaviour
     {
         this.coins += coins;       
     }
-    public void SpendCoins(int coins)
+    public bool SpendCoins(int coins)
     {
+        if(this.coins - coins < 0) return false;
         this.coins -= coins;
+        return true;
     }
 }

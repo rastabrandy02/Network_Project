@@ -5,34 +5,34 @@ using UnityEngine.UIElements;
 
 public class Melee_Enemy : MonoBehaviour
 {
-    [SerializeField] float maxHealth;
-    [SerializeField] float maxSpeed;
-    [SerializeField] float acceleration;
-    [SerializeField] float minDistanceToTarget;
-    [SerializeField] float attackSpeed;
-    [SerializeField] float damage;
-    [SerializeField] int enemyValue;
-    [SerializeField]Healthbar healthbar;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float maxSpeed;
+    [SerializeField] protected float acceleration;
+    [SerializeField] protected float minDistanceToTarget;
+    [SerializeField] protected float attackSpeed;
+    [SerializeField] protected float damage;
+    [SerializeField] protected int enemyValue;
+    [SerializeField] protected Healthbar healthbar;
 
-    Player_Stats targetPlayer;
-    Enemy_Manager enemyManager;
+    protected Player_Stats targetPlayer;
+    protected Enemy_Manager enemyManager;
 
-    Transform[] pathPoints;
-    Transform pathTarget;
+    protected Transform[] pathPoints;
+    protected Transform pathTarget;
 
-    float health;
-    bool isAlive = true;
+    protected float health;
+    protected bool isAlive = true;
 
-    int pathPointIndex = 0;  
-    float distanceTraveled;
-    Vector3 lastPos;
+    protected int pathPointIndex = 0;
+    protected float distanceTraveled;
+    protected Vector3 lastPos;
 
-    float timeSinceLastHit = 0.0f;
-   
-    Rigidbody2D rb;
+    protected float timeSinceLastHit = 0.0f;
 
-    delegate void State();
-    State state;
+    protected Rigidbody2D rb;
+
+    protected delegate void State();
+    protected State state;
 
     void Start()
     {
@@ -98,6 +98,18 @@ public class Melee_Enemy : MonoBehaviour
         
         }
     }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Base"))
+        {
+            timeSinceLastHit += Time.deltaTime;
+            if (timeSinceLastHit >= attackSpeed)
+            {
+                collision.gameObject.GetComponent<Player_Base>().TakeDamage(damage);
+                timeSinceLastHit = 0;
+            }
+        }
+    }
 
     public void SetPath(Transform[] path)
     {
@@ -128,17 +140,6 @@ public class Melee_Enemy : MonoBehaviour
         return distanceTraveled; 
     }
     
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if(collision.gameObject.CompareTag("Base"))
-        {
-            timeSinceLastHit += Time.deltaTime;
-            if(timeSinceLastHit >= attackSpeed)
-            {
-                collision.gameObject.GetComponent<Player_Base>().TakeDamage(damage);
-                timeSinceLastHit = 0;
-            }
-        }
-    }
+   
 }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Buying_Platform : MonoBehaviour
+public class Tower_Buying_Platform : MonoBehaviour
 {
     [SerializeField] int towerCost;
     [SerializeField] GameObject tower;
@@ -21,12 +21,16 @@ public class Buying_Platform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            if(Input.GetKey(KeyCode.E))
             {
-                collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost);
-                Instantiate(tower, transform.position, Quaternion.identity);
-                Destroy(gameObject);
+                if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost))
+                {
+                    Instantiate(tower, transform.position, Quaternion.identity);
+                    Destroy(gameObject);
+                }
+                
             }
         }
     }
+   
 }
