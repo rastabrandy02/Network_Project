@@ -11,8 +11,7 @@ public class Melee_Enemy : MonoBehaviour
     [SerializeField] protected float minDistanceToTarget;
     [SerializeField] protected float attackSpeed;
     [SerializeField] protected float damage;
-    [SerializeField] protected int enemyValue;
-    [SerializeField] protected Healthbar healthbar;
+    [SerializeField] protected int enemyValue;    
 
     protected Player_Stats targetPlayer;
     protected Enemy_Manager enemyManager;
@@ -30,16 +29,17 @@ public class Melee_Enemy : MonoBehaviour
     protected float timeSinceLastHit = 0.0f;
 
     protected Rigidbody2D rb;
+    protected Healthbar healthbar;
 
     protected delegate void State();
     protected State state;
 
     void Start()
-    {
-        
-        health = maxHealth;
+    {               
         rb = GetComponent<Rigidbody2D>();
+        healthbar = GetComponentInChildren<Healthbar>();
 
+        health = maxHealth;
         state = FollowPath;      
         pathTarget = pathPoints[pathPointIndex];
         lastPos = transform.position;

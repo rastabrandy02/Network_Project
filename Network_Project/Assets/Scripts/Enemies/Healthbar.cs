@@ -23,12 +23,8 @@ public class Healthbar : MonoBehaviour
         healthbar.value = health / maxHealth;
     }
     void Update()
-    {
-        
-       
+    {             
         transform.rotation = cam.transform.rotation;
-
         transform.position = parent.position + offset;
-
     }
 }
