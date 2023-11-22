@@ -14,7 +14,7 @@ public class TCPServer : MonoBehaviour
     private int _port = 6969;
 
     private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
-    private List<NetworkSocket> _connectedClients = new List<NetworkSocket>();
+    private List<NetSocket> _connectedClients = new List<NetSocket>();
 
     public TMPro.TextMeshProUGUI IPText;
     public TMPro.TextMeshProUGUI clientsText;
@@ -59,7 +59,7 @@ public class TCPServer : MonoBehaviour
             }
         }
 
-        IPText.text = "IP: " + hostIP.ToString();
+        IPText.text = "Server IP: " + hostIP.ToString();
     }
 
     void AcceptConnections(IAsyncResult AR)
@@ -77,6 +77,9 @@ public class TCPServer : MonoBehaviour
         clientNetSocket.socket = client;
         clientNetSocket.streamType = StreamType.TCP;
         clientNetSocket.connectionType = ConnectionType.Client;
+
+        _connectedClients.Add(clientNetSocket);
+        _refreshList = true;
 
         //listen for connected client data
         StateObject clientState = new StateObject(clientNetSocket);
@@ -103,7 +106,7 @@ public class TCPServer : MonoBehaviour
             netSocket.userName = userName;
 
 
-            _refreshList = true;
+            //_connectedClients.Add(netSocket);
         }
 
         //Recieving Chat Messages
@@ -134,14 +137,19 @@ public class TCPServer : MonoBehaviour
 
     void RefreshList()
     {
-        clientsText.text = "";
+        clientsText.text = "IP: ";      
 
         foreach (var client in _connectedClients)
         {
-            clientsText.text += client.userName + "\n";
+            clientsText.text += ((TcpClient)client.socket).Client.RemoteEndPoint.ToString() + "\n";
         }
-
+        
         _refreshList = false;
+    }
+
+    public void StartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Gameplay Scene");
     }
 
 
