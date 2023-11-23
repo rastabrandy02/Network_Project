@@ -8,10 +8,12 @@ public class Main_Menu : MonoBehaviour
     public void JoinGame()
     {
         SceneManager.LoadScene("Join Game Scene");
+        NetworkData.ConnectionType = ConnectionType.Client;
     }
 
     public void CreateGame()
     {
-        SceneManager.LoadScene("Create Game Scene");
+        SceneManager.LoadScene("Lobby");
+        NetworkData.ConnectionType = ConnectionType.Server;
     }
 }

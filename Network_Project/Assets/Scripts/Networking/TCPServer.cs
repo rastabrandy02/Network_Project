@@ -14,7 +14,7 @@ public class TCPServer : MonoBehaviour
     private int _port = 6969;
 
     private object _clientMutex = new object(); //used to lock variables so one one thread can use them at one time
-    private List<NetSocket> _connectedClients = new List<NetSocket>();
+    private List<NetSocket> _connectedClients = NetworkData.ConnectedClients;
 
     public TMPro.TextMeshProUGUI IPText;
     public TMPro.TextMeshProUGUI clientsText;
@@ -25,6 +25,8 @@ public class TCPServer : MonoBehaviour
     {
         InitServer();
         SetServerIP_UI();
+
+        _connectedClients = new();
     }
 
     private void Update()
@@ -38,12 +40,12 @@ public class TCPServer : MonoBehaviour
         _endPoint = new IPEndPoint(IPAddress.Any, _port);
         _socket = new NetSocket("Mongolia", ConnectionType.Server, StreamType.TCP, (IPEndPoint)_endPoint);
 
-
+        NetworkData.NetSocket = _socket;
+        
         Debug.Log("Created server, listenig on port " + _port);
         TcpListener listener = (TcpListener)_socket.socket;
         listener.Start();
-        listener.BeginAcceptTcpClient(new AsyncCallback(AcceptConnections), new StateObject(_socket));
-
+        listener.BeginAcceptTcpClient(new AsyncCallback(AcceptConnections), new StateObject(_socket));  
     }
 
     //print the Server IP on the canvas of the create server scene
@@ -137,7 +139,7 @@ public class TCPServer : MonoBehaviour
 
     void RefreshList()
     {
-        clientsText.text = "IP: ";      
+        clientsText.text = " ";      
 
         foreach (var client in _connectedClients)
         {
@@ -149,9 +151,16 @@ public class TCPServer : MonoBehaviour
 
     public void StartGame()
     {
+        StartGamePacket packet = new StartGamePacket();
+        byte[] data = packet.ToByteArray();
+        
+        foreach (NetSocket socket in _connectedClients)
+        {
+            ((TcpClient)socket.socket).Client.Send(data);
+        }
+       
         UnityEngine.SceneManagement.SceneManager.LoadScene("Gameplay Scene");
     }
-
 
 
     private void OnDestroy()

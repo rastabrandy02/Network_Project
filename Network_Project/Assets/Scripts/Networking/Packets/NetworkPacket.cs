@@ -1,7 +1,8 @@
 using System;
 public enum PacketType : int
 {
-    PlayerPosition
+    StartGame,
+    PlayerPosition,
 }
 
 
@@ -33,6 +34,28 @@ public class NetworkPacket
 
         size = BitConverter.ToInt32(data, offset); //the next 4 bytes will be the packet size
         offset += 4;
+    }
+
+    public static NetworkPacket ParsePacket(byte[] data)
+    {
+        NetworkPacket packet;
+        PacketType type = (PacketType)BitConverter.ToInt32(data, 0); //the first 4 bytes will be the packet type
+
+        switch (type)
+        {
+            case PacketType.StartGame:
+                {
+                    packet = new StartGamePacket();
+                    return packet;
+                }
+            case PacketType.PlayerPosition:
+                {
+                    packet = new PlayerPositionPacket();
+                    packet.FromByteArray(data);
+                    return packet;
+                }
+        }
+        return null;
     }
 }
 

@@ -53,4 +53,13 @@ public class PlayerPositionPacket : NetworkPacket
     }
 }
 
+public class StartGamePacket : NetworkPacket
+{
+    public StartGamePacket()
+    {
+        type = PacketType.StartGame;
+    }
+}
+
+
 //I drive - Ryan Gosling (me)
