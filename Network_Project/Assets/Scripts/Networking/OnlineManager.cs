@@ -54,6 +54,7 @@ public class OnlineManager : MonoBehaviour
         {
             case PacketType.PlayerPosition:
                 {
+                    //Debug.Log("Holiwis");
                     ProcessPlayerPos((PlayerPositionPacket)lastPacket);                    
                 }
                 break;
@@ -65,12 +66,11 @@ public class OnlineManager : MonoBehaviour
     private void ProcessPlayerPos(PlayerPositionPacket packet)
     {
         networkRigidbody.MovePosition(new Vector2(packet.x, packet.y));
-        Debug.Log("X: " + packet.x + "Y: " + packet.y);
+        //Debug.Log("X: " + packet.x + "Y: " + packet.y);
     }
 
     private void OnPacketRecieved(NetworkPacket packet)
-    {
-       // Debug.Log("Recieved hehe");
+    {       
         lastPacket = packet;
     }
 
@@ -89,17 +89,15 @@ public class OnlineManager : MonoBehaviour
 
             var position = localPlayer.transform.position;
             PlayerPositionPacket packet = new PlayerPositionPacket(position.x, position.y, 0);
-
+            
             byte[] data = packet.ToByteArray();
 
             if (NetworkData.ConnectionType == ConnectionType.Client)
-            {
-                Debug.Log("Sent Client Pos");
+            {               
                 _client.SendPacket(data);
             }            
             if (NetworkData.ConnectionType == ConnectionType.Server)
-            {
-               Debug.Log("Sent Server Pos");
+            {               
                 _server.SendPacket(data);
             }
         }

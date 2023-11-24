@@ -54,8 +54,7 @@ public class UDP_Client : MonoBehaviour
     }
 
     public void SendPacket(byte[] data)
-    {
-        Debug.Log("SENDING PACKET (CLIENT)");
+    {       
         _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
     }
 

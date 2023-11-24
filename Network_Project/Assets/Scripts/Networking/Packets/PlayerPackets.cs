@@ -26,13 +26,13 @@ public class PlayerPositionPacket : NetworkPacket
         int offset = 8;
 
         BitConverter.GetBytes(x).CopyTo(data, offset); //the next 4 bytes will be the player x
-        offset += 4;
+        offset += sizeof(float);
 
         BitConverter.GetBytes(y).CopyTo(data, offset); //the next 4 bytes will be the player y
-        offset += 4;
+        offset += sizeof(float);
 
         BitConverter.GetBytes(z).CopyTo(data, offset); //the next 4 bytes will be the player z
-        offset += 4;
+        offset += sizeof(float);
 
         return data;
     }
@@ -43,13 +43,13 @@ public class PlayerPositionPacket : NetworkPacket
 
         int offset = 0;
 
-        x = BitConverter.ToInt32(data, offset); //the next 4 bytes will be the player x
-        offset += 4;
+        x = BitConverter.ToSingle(data, offset); //the next 4 bytes will be the player x
+        offset += sizeof (float);
 
-        y = BitConverter.ToInt32(data, offset); //the next 4 bytes will be the player y
-        offset += 4;
+        y = BitConverter.ToSingle(data, offset); //the next 4 bytes will be the player y
+        offset += sizeof(float);
 
-        z = BitConverter.ToInt32(data, offset); //the next 4 bytes will be the player z
+        z = BitConverter.ToSingle(data, offset); //the next 4 bytes will be the player z
     }
 }
 
