@@ -36,7 +36,7 @@ public class OnlineManager : MonoBehaviour
             networkPlayer.transform.position = clientSpawn.position;
             localPlayer.transform.position = serverSpawn.position;
         }
-
+        
         StartCoroutine(SendPackets());
     }
 
@@ -54,7 +54,7 @@ public class OnlineManager : MonoBehaviour
         {
             case PacketType.PlayerPosition:
                 {
-                    ProcessPlayerPos((PlayerPositionPacket)lastPacket);
+                    ProcessPlayerPos((PlayerPositionPacket)lastPacket);                    
                 }
                 break;
         }
@@ -65,17 +65,24 @@ public class OnlineManager : MonoBehaviour
     private void ProcessPlayerPos(PlayerPositionPacket packet)
     {
         networkRigidbody.MovePosition(new Vector2(packet.x, packet.y));
-        Debug.Log("X: " + packet.x + "Y: " + packet.y + "Z: " + 0);
+        Debug.Log("X: " + packet.x + "Y: " + packet.y);
     }
 
     private void OnPacketRecieved(NetworkPacket packet)
     {
-        Debug.Log("Recieved hehe");
+       // Debug.Log("Recieved hehe");
         lastPacket = packet;
     }
 
     private IEnumerator SendPackets()
     {
+        if (NetworkData.ConnectionType == ConnectionType.Client)
+        {
+            HelloPacket packet = new HelloPacket();
+            byte[] data = packet.ToByteArray();            
+            _client.SendPacket(data);            
+        }
+
         while (true)
         {
             yield return new WaitForSeconds(0.01f);
@@ -85,15 +92,14 @@ public class OnlineManager : MonoBehaviour
 
             byte[] data = packet.ToByteArray();
 
-
             if (NetworkData.ConnectionType == ConnectionType.Client)
             {
                 Debug.Log("Sent Client Pos");
                 _client.SendPacket(data);
-            }
-            else
+            }            
+            if (NetworkData.ConnectionType == ConnectionType.Server)
             {
-                Debug.Log("Sent Server Pos");
+               Debug.Log("Sent Server Pos");
                 _server.SendPacket(data);
             }
         }

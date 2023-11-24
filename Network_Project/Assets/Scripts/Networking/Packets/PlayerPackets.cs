@@ -58,8 +58,15 @@ public class StartGamePacket : NetworkPacket
     public StartGamePacket()
     {
         type = PacketType.StartGame;
-    }
+    }   
 }
 
+ public class HelloPacket : NetworkPacket
+    {
+        public HelloPacket()
+        {
+            type = PacketType.Hello;
+        }
+    }
 
 //I drive - Ryan Gosling (me)

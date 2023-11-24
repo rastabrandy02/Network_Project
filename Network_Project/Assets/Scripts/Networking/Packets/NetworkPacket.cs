@@ -3,6 +3,7 @@ public enum PacketType : int
 {
     StartGame,
     PlayerPosition,
+    Hello,
 }
 
 

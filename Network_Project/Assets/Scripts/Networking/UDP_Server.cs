@@ -15,6 +15,9 @@ public class UDP_Server : MonoBehaviour
     private byte[] buffer;
     public Action<NetworkPacket> OnPacketRecieved;
 
+    private object mutex = new object();
+    private bool clientConnected = false;
+
     private void Start()
     {
         InitServer();
@@ -36,7 +39,6 @@ public class UDP_Server : MonoBehaviour
 
         buffer = new byte[NetworkPacket.MAX_SIZE];
         _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
-
     }
 
 
@@ -49,13 +51,18 @@ public class UDP_Server : MonoBehaviour
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
         OnPacketRecieved?.Invoke(packet);
 
+        lock(mutex)
+        {
+            clientConnected = true;
+        }
         _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
 
     }
 
     public void SendPacket(byte[] data)
-    {
-        _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
+    {        
+        if (clientConnected)
+            _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
     }
 
     private void OnDestroy()
