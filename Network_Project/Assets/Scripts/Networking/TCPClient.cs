@@ -24,6 +24,8 @@ public class TCPClient : MonoBehaviour
             return;
         }
 
+        NetworkData.ServerAddress = address;
+
         _endPoint = new IPEndPoint(address, _port);
         _socket = new NetSocket(userNameField.text, ConnectionType.Client, StreamType.TCP, (IPEndPoint)_endPoint);
         ((TcpClient)_socket.socket).Client.Connect(_endPoint);

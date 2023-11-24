@@ -69,6 +69,7 @@ public class NetSocket
 public static class NetworkData
 {
     public const int Port = 9999;
+    public static IPAddress ServerAddress;
     public static NetSocket NetSocket;
     public static List<NetSocket> ConnectedClients;
     public static ConnectionType ConnectionType;

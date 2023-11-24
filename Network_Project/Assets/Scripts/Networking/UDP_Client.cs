@@ -1,130 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Text;
+using System.Threading;
 
 public class UDP_Client : MonoBehaviour
 {
-    public string IP { get; set; }
-    public string userName { get; set; }
+    private EndPoint _endPoint;
+    private Socket _socket;
+    private int _port = 6969;
+    private byte[] buffer;
+    public Action<NetworkPacket> OnPacketRecieved;
 
-    string serverName;
-    int port = 9999;
-
-    EndPoint _endPoint;
-
-    Thread communicateThread;
-    Socket mySocket;
-    object clientMutex = new object();
-
-    public bool isConnected = false;
-
-    public GameObject joinServerUI;
-    public GameObject lobbyUI;
-
-    void Start()
+    private void Start()
     {
-        lobbyUI.SetActive(false);
-        joinServerUI.SetActive(true);
-    }
-    void Update()
-    {
-        if (mySocket != null)
-        {
-            if (isConnected && !lobbyUI.activeSelf)
-            {
-                lobbyUI.SetActive(true);
-                joinServerUI.SetActive(false);
-                lobbyUI.GetComponent<LobbyUI>().SetNames(userName, serverName);
-            }
-        }
+        ConnectToServer();
     }
 
-    public void ConnectToServer()
+    private void Update()
     {
-        if (IP == "")
-        {
-            Debug.LogError("IP is null");
-            return;
-        }
-
-        bool isValid = IPAddress.TryParse(IP, out var iPAddress);
-
-        if (!isValid)
-        {
-            Debug.LogError("invalid IP");
-            return;
-        }
-
-        _endPoint = new IPEndPoint(IPAddress.Parse(IP), port);
-
-        mySocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        try
-        {
-            mySocket.Connect(_endPoint);
-            Debug.Log("Trying to connect to server...");
-
-            communicateThread = new Thread(CommunicateWithServer);
-            communicateThread.IsBackground = true;
-            communicateThread.Start();
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Error connecting to server " + e);
-            return;
-        }
 
     }
-    void CommunicateWithServer()
+
+    void ConnectToServer()
     {
-        while (true)
-        {
-            //Send User Name
-            byte[] data = Encoding.ASCII.GetBytes(userName);
-            mySocket.SendTo(data, data.Length, SocketFlags.None, _endPoint);
-            Debug.Log("Sent user name to server");
+        //Create & bind endpoint and socket
+        _endPoint = new IPEndPoint(NetworkData.ServerAddress, _port);
+         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-            //Recieve Server Name
-            data = new byte[2048];
-            int recievedBytes = mySocket.ReceiveFrom(data, ref _endPoint);
-
-            string savedServerName = Encoding.ASCII.GetString(data, 0, recievedBytes);
-            Debug.Log("Server Name is: " + savedServerName);
-
-
-            lock (clientMutex)
-            {
-                savedServerName = serverName;
-                isConnected = true;
-
-            }
-            break;
-        }
+       buffer = new byte[NetworkPacket.MAX_SIZE];
+        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
     }
+
+
+    void RecieveCallback(IAsyncResult AR)
+    {
+        int rBytes = _socket.EndReceiveFrom(AR, ref _endPoint);
+
+        if (rBytes == 0) return; //Client has disconnected from server
+
+        NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
+        OnPacketRecieved?.Invoke(packet);
+
+        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+    }
+
+    public void SendPacket(byte[] data)
+    {
+        _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
+    }
+
+
     private void OnDestroy()
     {
-        //Destroy Thread
-        if (communicateThread != null)
-        {
-            if (communicateThread.IsAlive)
-            {
-                communicateThread.Abort();
-            }
-        }
-        //Destroy Socket
-        if (mySocket != null)
-        {
-            if (mySocket.Connected)
-            {
-                mySocket.Shutdown(SocketShutdown.Both);
-            }
-            mySocket.Close();
-        }
+
     }
 }
+

@@ -1,167 +1,68 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
 using UnityEngine;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using TMPro;
 
 public class UDP_Server : MonoBehaviour
 {
-    int port = 9999;
-    Thread acceptThread;
-    Socket _socket;
-    
-    private List<NetworkSocket> connectedClients = new List<NetworkSocket>();
-    private List<Thread> clientThreads = new List<Thread>();
+    private EndPoint _endPoint;
+    private Socket _socket;
+    private int _port = 6969;
+    private byte[] buffer;
+    public Action<NetworkPacket> OnPacketRecieved;
 
-    public TextMeshProUGUI IPText;
-    public TextMeshProUGUI clientsText;
-
-    private object clientMutex = new object();
-    bool refreshUserList = true;
-    void Start()
+    private void Start()
     {
         InitServer();
-        SetServerIP_UI();
     }
-    void Update()
+
+    private void Update()
     {
-        if (refreshUserList) RefreshList();
+
     }
 
     void InitServer()
     {
-
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
-
+        //Create & bind endpoint and socket
+        _endPoint = new IPEndPoint(IPAddress.Any, 0);
+        EndPoint endPoint = new IPEndPoint(IPAddress.Any, _port);
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        _socket.Bind(ipep);
+        _socket.Bind(endPoint);
 
-        Debug.Log("Created server, listenig on port " + port);
+        buffer = new byte[NetworkPacket.MAX_SIZE];
+        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
 
-        acceptThread = new Thread(AcceptConnections);
-        acceptThread.Start();
-    }
-    void SetServerIP_UI()
-    {
-        IPAddress hostIP = IPAddress.Any;
-
-        foreach (var ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                hostIP = ip;
-            }
-        }
-
-        IPText.text = "IP: " + hostIP.ToString();
-    }
-    
-    void AcceptConnections()
-    {
-        while (true)
-        {
-            EndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
-            byte[] data = new byte[2048];
-
-            int recievedBytes = _socket.ReceiveFrom(data, ref endPoint);
-
-            Debug.Log("New client! -  IP: " + endPoint);
-
-            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
-
-            NetworkSocket netSocket = new NetworkSocket(userName, null, endPoint);
-
-            Thread clientThread = new Thread(RecieveMessage);
-
-            lock (clientMutex)
-            {
-                connectedClients.Add(netSocket);
-                clientThreads.Add(clientThread);
-            }
-
-            clientThread.Start();
-
-            refreshUserList = true;
-
-
-            //Send Server Name
-            data = Encoding.ASCII.GetBytes("UDP Serverino");
-            _socket.SendTo(data, endPoint);
-        }
-    }
-    void RecieveMessage()
-    {
-        while (true)
-        {
-            EndPoint endPoint = new IPEndPoint(IPAddress.Any, port);
-
-            //Recieve User Name
-            byte[] data = new byte[2048];
-            int recievedBytes = _socket.ReceiveFrom(data, ref endPoint);
-
-            string userName = Encoding.ASCII.GetString(data, 0, recievedBytes);
-            Debug.Log("User Name is: " + userName);
-
-            refreshUserList = true;
-
-
-            //Send Server Name
-            data = Encoding.ASCII.GetBytes("UDP Serverino");
-            _socket.SendTo(data, endPoint);
-        }
     }
 
-    void RefreshList()
+
+    void RecieveCallback(IAsyncResult AR)
     {
-        clientsText.text = "";
+        int rBytes = _socket.EndReceiveFrom(AR, ref _endPoint);
 
-        foreach (var client in connectedClients)
-        {
-            clientsText.text += client.userName + "\n";
-        }
+        if (rBytes == 0) return; //Client has disconnected from server
 
-        refreshUserList = false;
+        NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
+        OnPacketRecieved?.Invoke(packet);
+
+        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+
+    }
+
+    public void SendPacket(byte[] data)
+    {
+        _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
     }
 
     private void OnDestroy()
     {
-        //Destroy Threads
-        if (acceptThread != null)
-        {
-            if (acceptThread.IsAlive)
-            {
-                acceptThread.Abort();
 
-            }
-        }
-
-        foreach (var thread in clientThreads)
-        {
-            if (thread.IsAlive)
-            {
-                thread.Abort();
-            }
-        }
-
-        //Destroy Socket
-        if (_socket != null)
-        {
-            if (_socket.Connected)
-            {
-                _socket.Shutdown(SocketShutdown.Both);
-            }
-
-            _socket.Close();
-        }
     }
-
-
-
-
 }
+
+
 
