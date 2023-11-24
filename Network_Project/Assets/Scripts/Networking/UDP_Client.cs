@@ -15,14 +15,19 @@ public class UDP_Client : MonoBehaviour
     private byte[] buffer;
     public Action<NetworkPacket> OnPacketRecieved;
 
-    private void Start()
-    {
-        ConnectToServer();
-    }
+    //private void Start()
+    //{
+    //    ConnectToServer();
+    //}
 
     private void Update()
     {
 
+    }
+
+    private void Awake()
+    {
+        ConnectToServer();
     }
 
     void ConnectToServer()
@@ -50,6 +55,7 @@ public class UDP_Client : MonoBehaviour
 
     public void SendPacket(byte[] data)
     {
+        Debug.Log("SENDING PACKET (CLIENT)");
         _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
     }
 
