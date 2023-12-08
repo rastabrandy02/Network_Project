@@ -41,7 +41,7 @@ public class PlayerPositionPacket : NetworkPacket
     {
         base.FromByteArray(data);
 
-        int offset = 0;
+        int offset = 8;
 
         x = BitConverter.ToSingle(data, offset); //the next 4 bytes will be the player x
         offset += sizeof (float);
