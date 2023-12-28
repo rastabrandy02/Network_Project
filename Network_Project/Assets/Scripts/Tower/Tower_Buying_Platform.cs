@@ -28,7 +28,10 @@ public class Tower_Buying_Platform : MonoBehaviour
                 if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost))
                 {
                     canSpawn = false;
-                    Instantiate(tower, transform.position, Quaternion.identity);                    
+                    Instantiate(tower, transform.position, Quaternion.identity);
+                    SpawnPacket packet = new SpawnPacket();
+                    //FindObjectOfType<OnlineManager>().SendPacket(packet);
+                  
                     Destroy(gameObject);
                 }
                 

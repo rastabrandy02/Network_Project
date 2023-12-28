@@ -11,18 +11,25 @@ public class UDP_Client : MonoBehaviour
 {
     private EndPoint _endPoint;
     private Socket _socket;
+
     private int _port = 6969;
     private byte[] buffer;
+
     public Action<NetworkPacket> OnPacketRecieved;
 
-    //private void Start()
-    //{
-    //    ConnectToServer();
-    //}
+    private List<NetworkPacket> PacketQueue = new ();
+    private object packetMutex = new object();
 
     private void Update()
     {
-
+        lock(packetMutex)
+        {
+            foreach(NetworkPacket p in PacketQueue)
+            {
+                OnPacketRecieved?.Invoke(p);
+            }
+            PacketQueue.Clear();
+        }
     }
 
     private void Awake()
@@ -48,8 +55,12 @@ public class UDP_Client : MonoBehaviour
         if (rBytes == 0) return; //Client has disconnected from server
 
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
-        OnPacketRecieved?.Invoke(packet);
-
+        
+        lock(packetMutex)
+        {
+            PacketQueue.Add(packet);
+        }
+        
         _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
     }
 

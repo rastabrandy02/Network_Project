@@ -6,7 +6,6 @@ public class OnlineManager : MonoBehaviour
 {
     public GameObject localPlayer;
     public GameObject networkPlayer;
-    private NetworkPacket lastPacket;
     
     private UDP_Client _client;
     private UDP_Server _server;
@@ -40,28 +39,12 @@ public class OnlineManager : MonoBehaviour
         StartCoroutine(SendPackets());
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        ProcessPackets();
-    }
-
-    private void ProcessPackets()
-    {
-        if (lastPacket == null) return;
-
-        switch (lastPacket.type)
-        {
-            case PacketType.PlayerPosition:
-                {
-                    //Debug.Log("Holiwis");
-                    ProcessPlayerPos((PlayerPositionPacket)lastPacket);                    
-                }
-                break;
-        }
-
-        lastPacket = null;
-    }
+       
+    }   
 
     private void ProcessPlayerPos(PlayerPositionPacket packet)
     {
@@ -70,8 +53,35 @@ public class OnlineManager : MonoBehaviour
     }
 
     private void OnPacketRecieved(NetworkPacket packet)
-    {       
-        lastPacket = packet;
+    {
+        switch (packet.type)
+        {
+            case PacketType.PlayerPosition:
+                {
+                    //Debug.Log("Holiwis");
+                    ProcessPlayerPos((PlayerPositionPacket)packet);
+                }
+                break;
+            case PacketType.Spawn:
+                {
+                    Debug.Log("Spawn Packet vaya pinga tiene Pablo");
+                }
+                break;
+        }
+    }
+
+    public void SendPacket(NetworkPacket packet)
+    {
+        byte[] data = packet.ToByteArray();
+
+        if (NetworkData.ConnectionType == ConnectionType.Client)
+        {
+            _client.SendPacket(data);
+        }
+        if (NetworkData.ConnectionType == ConnectionType.Server)
+        {
+            _server.SendPacket(data);
+        }
     }
 
     private IEnumerator SendPackets()
@@ -89,17 +99,9 @@ public class OnlineManager : MonoBehaviour
 
             var position = localPlayer.transform.position;
             PlayerPositionPacket packet = new PlayerPositionPacket(position.x, position.y, 0);
-            
-            byte[] data = packet.ToByteArray();
 
-            if (NetworkData.ConnectionType == ConnectionType.Client)
-            {               
-                _client.SendPacket(data);
-            }            
-            if (NetworkData.ConnectionType == ConnectionType.Server)
-            {               
-                _server.SendPacket(data);
-            }
+            SendPacket(packet);
         }
+           
     }
 }

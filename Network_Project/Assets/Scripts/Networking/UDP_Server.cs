@@ -15,6 +15,9 @@ public class UDP_Server : MonoBehaviour
     private byte[] buffer;
     public Action<NetworkPacket> OnPacketRecieved;
 
+    private List<NetworkPacket> PacketQueue = new();
+    private object packetMutex = new object();
+
     private object mutex = new object();
     private bool clientConnected = false;
 
@@ -25,7 +28,14 @@ public class UDP_Server : MonoBehaviour
 
     private void Update()
     {
-
+        lock (packetMutex)
+        {
+            foreach (NetworkPacket p in PacketQueue)
+            {
+                OnPacketRecieved?.Invoke(p);
+            }
+            PacketQueue.Clear();
+        }
     }
 
     void InitServer()
@@ -49,9 +59,13 @@ public class UDP_Server : MonoBehaviour
         if (rBytes == 0) return; //Client has disconnected from server
 
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
-        OnPacketRecieved?.Invoke(packet);
+        Debug.Log(packet);
+        lock (packetMutex)
+        {
+            PacketQueue.Add(packet);
+        }
 
-        lock(mutex)
+        lock (mutex)
         {
             clientConnected = true;
         }

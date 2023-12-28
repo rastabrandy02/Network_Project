@@ -4,6 +4,7 @@ public enum PacketType : int
     StartGame,
     PlayerPosition,
     Hello,
+    Spawn,
 }
 
 
@@ -49,9 +50,21 @@ public class NetworkPacket
                     packet = new StartGamePacket();
                     return packet;
                 }
+            case PacketType.Hello:
+                {
+                    packet = new HelloPacket();
+                    packet.FromByteArray(data);
+                    return packet;
+                }
             case PacketType.PlayerPosition:
                 {
                     packet = new PlayerPositionPacket();
+                    packet.FromByteArray(data);
+                    return packet;
+                }
+            case PacketType.Spawn:
+                {
+                    packet = new SpawnPacket();
                     packet.FromByteArray(data);
                     return packet;
                 }
