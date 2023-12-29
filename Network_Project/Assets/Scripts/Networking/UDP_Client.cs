@@ -52,8 +52,15 @@ public class UDP_Client : MonoBehaviour
 
     void RecieveCallback(IAsyncResult AR)
     {
-        buffer = _socket.EndReceive(AR, ref _endPoint);
-        Debug.Log("Gaychi");
+        try
+        {
+            buffer = _socket.EndReceive(AR, ref _endPoint);
+        } catch(Exception e)
+        {
+            Debug.LogError(e);
+        }
+
+
 
 
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);

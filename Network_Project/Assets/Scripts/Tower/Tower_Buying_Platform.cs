@@ -12,45 +12,48 @@ public class Tower_Buying_Platform : MonoBehaviour
     bool canSpawn = true;
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            if(Input.GetKey(KeyCode.E) && canSpawn)
+            if (Input.GetKey(KeyCode.E) && canSpawn)
             {
-                if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost))
+                var _player_stats = collision.gameObject.GetComponent<Player_Stats>();
+                if (_player_stats == player)
                 {
-                    SpawnPacket packet = new SpawnPacket();
-                    packet.tower_id = int.Parse(name.Split('_')[1]);
-                    OnlineManager.instance.SendPacket(packet);
-                    Spawn();
+                    if (_player_stats.SpendCoins(towerCost))
+                    {
+                        SpawnPacket packet = new SpawnPacket();
+                        packet.tower_id = int.Parse(name.Split('_')[1]);
+                        OnlineManager.instance.SendPacket(packet);
+                        Spawn();
+                    }
                 }
-                
             }
         }
     }
-   
+
     public void Spawn()
     {
-        if(canSpawn == false)
+        if (canSpawn == false)
         {
             return;
         }
 
-        canSpawn = false;         
+        canSpawn = false;
         GameObject go = Instantiate(tower, transform.position, Quaternion.identity);
         go.GetComponent<Tower>().player_stats = player;
-        
-       
+
+
 
         Destroy(gameObject);
     }

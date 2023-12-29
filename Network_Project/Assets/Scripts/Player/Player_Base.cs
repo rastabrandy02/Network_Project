@@ -17,10 +17,14 @@ public class Player_Base : MonoBehaviour
     {
         healthbar.SetHealth(health, maxHealth);
 
-        if(health <= 0)
+        if (Input.GetKeyDown(KeyCode.R)) TakeDamage(0.1f);
+
+        if (health <= 0)
         {
             Die();
         }
+
+
     }
     public void TakeDamage(float damage)
     {
