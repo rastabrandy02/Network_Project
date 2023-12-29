@@ -30,7 +30,7 @@ public class Tower_Buying_Platform : MonoBehaviour
                     canSpawn = false;
                     Instantiate(tower, transform.position, Quaternion.identity);
                     SpawnPacket packet = new SpawnPacket();
-                    //FindObjectOfType<OnlineManager>().SendPacket(packet);
+                    FindObjectOfType<OnlineManager>().SendPacket(packet);
                   
                     Destroy(gameObject);
                 }
