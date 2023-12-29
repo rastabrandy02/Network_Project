@@ -9,22 +9,23 @@ using System.Threading;
 
 public class UDP_Client : MonoBehaviour
 {
-    private EndPoint _endPoint;
-    private Socket _socket;
+    private IPEndPoint _endPoint;
+    private UdpClient _socket;
 
     private int _port = 6969;
     private byte[] buffer;
 
     public Action<NetworkPacket> OnPacketRecieved;
+    public bool Connected = false;
 
-    private List<NetworkPacket> PacketQueue = new ();
+    private List<NetworkPacket> PacketQueue = new();
     private object packetMutex = new object();
 
     private void Update()
     {
-        lock(packetMutex)
+        lock (packetMutex)
         {
-            foreach(NetworkPacket p in PacketQueue)
+            foreach (NetworkPacket p in PacketQueue)
             {
                 OnPacketRecieved?.Invoke(p);
             }
@@ -40,33 +41,34 @@ public class UDP_Client : MonoBehaviour
     void ConnectToServer()
     {
         //Create & bind endpoint and socket
-        _endPoint = new IPEndPoint(NetworkData.ServerAddress, _port);
-         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _port = NetworkData.Port + 1;
+        _socket = new UdpClient(_port);
+        _socket.Connect(NetworkData.ServerAddress, NetworkData.Port);
+        buffer = new byte[NetworkPacket.MAX_SIZE];
 
-       buffer = new byte[NetworkPacket.MAX_SIZE];
-        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+        _socket.BeginReceive(new AsyncCallback(RecieveCallback), null);
     }
 
 
     void RecieveCallback(IAsyncResult AR)
     {
-        int rBytes = _socket.EndReceiveFrom(AR, ref _endPoint);
+        buffer = _socket.EndReceive(AR, ref _endPoint);
 
-        if (rBytes == 0) return; //Client has disconnected from server
+
 
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
-        
-        lock(packetMutex)
+
+        lock (packetMutex)
         {
             PacketQueue.Add(packet);
         }
-        
-        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+
+        _socket.BeginReceive(new AsyncCallback(RecieveCallback), null);
     }
 
     public void SendPacket(byte[] data)
-    {       
-        _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
+    {
+        _socket.Send(data, NetworkPacket.MAX_SIZE, _endPoint);
     }
 
 

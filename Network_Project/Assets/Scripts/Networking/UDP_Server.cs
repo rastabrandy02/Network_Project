@@ -6,13 +6,24 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+public class PacketState
+{
+    public UdpClient Socket;
+    public IPEndPoint EndPoint;
+    public byte[] Data;
+    ~PacketState()
+    {
+        Socket?.Dispose();
+    }
+}
 
 public class UDP_Server : MonoBehaviour
 {
-    private EndPoint _endPoint;
-    private Socket _socket;
+    
     private int _port = 6969;
-    private byte[] buffer;
+    private UdpClient _server;
+    private IPEndPoint _endPoint;
+    
     public Action<NetworkPacket> OnPacketRecieved;
 
     private List<NetworkPacket> PacketQueue = new();
@@ -21,7 +32,7 @@ public class UDP_Server : MonoBehaviour
     private object mutex = new object();
     private bool clientConnected = false;
 
-    private void Start()
+    private void Awake()
     {
         InitServer();
     }
@@ -40,43 +51,58 @@ public class UDP_Server : MonoBehaviour
 
     void InitServer()
     {
-        //Create & bind endpoint and socket
-        _endPoint = new IPEndPoint(IPAddress.Any, 0);
-        EndPoint endPoint = new IPEndPoint(IPAddress.Any, _port);
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        PacketState state = new PacketState();
+        state.Data = new byte[NetworkPacket.MAX_SIZE];
 
-        _socket.Bind(endPoint);
+        _server = new UdpClient(NetworkData.Port);
+        state.Socket = _server;
 
-        buffer = new byte[NetworkPacket.MAX_SIZE];
-        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+
+        
+        state.Socket.BeginReceive(new AsyncCallback(RecieveCallback), state);
     }
 
 
     void RecieveCallback(IAsyncResult AR)
     {
-        int rBytes = _socket.EndReceiveFrom(AR, ref _endPoint);
+        PacketState state = (PacketState)AR.AsyncState;
+        state.Data = state.Socket.EndReceive(AR, ref state.EndPoint);
 
-        if (rBytes == 0) return; //Client has disconnected from server
 
-        NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
-        Debug.Log(packet);
-        lock (packetMutex)
+        NetworkPacket packet = NetworkPacket.ParsePacket(state.Data);
+        if (packet.type == PacketType.Hello)
         {
-            PacketQueue.Add(packet);
-        }
 
-        lock (mutex)
+            
+            lock (mutex)
+            {
+                _endPoint = state.EndPoint;
+                clientConnected = true;
+                SendPacket(state.Data);
+            }
+            
+        }
+        else
         {
-            clientConnected = true;
+            lock (packetMutex)
+            {
+                PacketQueue.Add(packet);
+            }
         }
-        _socket.BeginReceiveFrom(buffer, 0, NetworkPacket.MAX_SIZE, 0, ref _endPoint, new AsyncCallback(RecieveCallback), null);
+        
 
+        
+        state.Socket.BeginReceive(new AsyncCallback(RecieveCallback), state);
     }
 
     public void SendPacket(byte[] data)
-    {        
+    {
         if (clientConnected)
-            _socket.SendTo(data, 0, NetworkPacket.MAX_SIZE, SocketFlags.None, _endPoint);
+        {
+            Debug.Log("Send poquet");
+            
+            _server.Send(data, NetworkPacket.MAX_SIZE, _endPoint);
+        }
     }
 
     private void OnDestroy()

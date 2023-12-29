@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OnlineManager : MonoBehaviour
 {
+    public static OnlineManager instance;
+
     public GameObject localPlayer;
     public GameObject networkPlayer;
     
@@ -14,10 +16,29 @@ public class OnlineManager : MonoBehaviour
     public Transform serverSpawn;
     public Transform clientSpawn;
 
-    // Start is called before the first frame update
+    public GameObject[] tower_Client = new GameObject[3];
+    public GameObject[] tower_Host = new GameObject[3];
+    private void Awake()
+    {
+        instance = this; 
+    }
+
     void Start()
     {
+        for (int i = 0; i < tower_Client.Length; i++)
+        {
+            tower_Client[i].name = "TClient_" + i;
+        }
+
+        for (int i = 0; i < tower_Host.Length; i++)
+        {
+            tower_Host[i].name = "THost_" + i;
+        }
+
+
         networkRigidbody = networkPlayer.GetComponent<Rigidbody2D>();
+        ReplicationManager.instance.networkRigidbody = networkRigidbody;
+        ReplicationManager.instance.localPlayer = localPlayer;
 
         if (NetworkData.ConnectionType == ConnectionType.Client)
         {
@@ -46,28 +67,15 @@ public class OnlineManager : MonoBehaviour
        
     }   
 
-    private void ProcessPlayerPos(PlayerPositionPacket packet)
-    {
-        networkRigidbody.MovePosition(new Vector2(packet.x, packet.y));
-        //Debug.Log("X: " + packet.x + "Y: " + packet.y);
-    }
-
+    
     private void OnPacketRecieved(NetworkPacket packet)
     {
-        switch (packet.type)
+        Debug.Log("Packet Recieved");
+        if (packet.type == PacketType.Hello)
         {
-            case PacketType.PlayerPosition:
-                {
-                    //Debug.Log("Holiwis");
-                    ProcessPlayerPos((PlayerPositionPacket)packet);
-                }
-                break;
-            case PacketType.Spawn:
-                {
-                    Debug.Log("Spawn Packet vaya pinga tiene Pablo");
-                }
-                break;
+            _client.Connected = true;
         }
+        ReplicationManager.instance.ProcessPacket(packet);
     }
 
     public void SendPacket(NetworkPacket packet)
@@ -88,20 +96,19 @@ public class OnlineManager : MonoBehaviour
     {
         if (NetworkData.ConnectionType == ConnectionType.Client)
         {
-            HelloPacket packet = new HelloPacket();
-            byte[] data = packet.ToByteArray();            
-            _client.SendPacket(data);            
+            while (_client.Connected == false)
+            {
+                HelloPacket packet = new HelloPacket();
+                byte[] data = packet.ToByteArray();
+                _client.SendPacket(data);
+
+                yield return new WaitForSeconds(0.01f);
+            }
+
+                 
         }
 
-        while (true)
-        {
-            yield return new WaitForSeconds(0.01f);
+       
 
-            var position = localPlayer.transform.position;
-            PlayerPositionPacket packet = new PlayerPositionPacket(position.x, position.y, 0);
-
-            SendPacket(packet);
-        }
-           
     }
 }

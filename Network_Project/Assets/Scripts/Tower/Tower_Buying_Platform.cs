@@ -27,16 +27,27 @@ public class Tower_Buying_Platform : MonoBehaviour
             {
                 if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(towerCost))
                 {
-                    canSpawn = false;
-                    Instantiate(tower, transform.position, Quaternion.identity);
                     SpawnPacket packet = new SpawnPacket();
-                    FindObjectOfType<OnlineManager>().SendPacket(packet);
-                  
-                    Destroy(gameObject);
+                    packet.tower_id = int.Parse(name.Split('_')[1]);
+                    OnlineManager.instance.SendPacket(packet);
+                    Spawn();
                 }
                 
             }
         }
     }
    
+    public void Spawn()
+    {
+        if(canSpawn == false)
+        {
+            return;
+        }
+
+        canSpawn = false;
+        Instantiate(tower, transform.position, Quaternion.identity);
+       
+
+        Destroy(gameObject);
+    }
 }
