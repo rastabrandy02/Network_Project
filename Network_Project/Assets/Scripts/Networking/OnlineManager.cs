@@ -111,7 +111,7 @@ public class OnlineManager : MonoBehaviour
 
     private void OnPacketRecieved(NetworkPacket packet)
     {
-        Debug.Log("Packet Recieved");
+        //Debug.Log("Packet Recieved");
         if (packet.type == PacketType.Hello)
         {
             _client.Connected = true;

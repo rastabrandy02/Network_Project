@@ -12,15 +12,18 @@ public class NetworkObject : MonoBehaviour
 public class ReplicationManager : MonoBehaviour
 {
     public static ReplicationManager instance;
-    
-    List<NetworkObject> netObjects = new ();
+
+    List<NetworkObject> netObjects = new();
 
     public GameObject localPlayer;
     public Rigidbody2D networkRigidbody;
 
+    public Player_Base hostBase;
+    public Player_Base clientBase;
+
     private void Awake()
     {
-        
+
         instance = this;
     }
     void Start()
@@ -30,7 +33,7 @@ public class ReplicationManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     private void ProcessPlayerPos(PlayerPositionPacket packet)
@@ -51,7 +54,12 @@ public class ReplicationManager : MonoBehaviour
                 break;
             case PacketType.Spawn:
                 {
-                   ProcessSpawn((SpawnPacket)packet);
+                    ProcessSpawn((SpawnPacket)packet);
+                }
+                break;
+            case PacketType.BaseDamage:
+                {
+                    ProcessBaseDmg((BaseDmgPacket)packet);
                 }
                 break;
         }
@@ -69,6 +77,22 @@ public class ReplicationManager : MonoBehaviour
         }
     }
 
+    private void ProcessBaseDmg(BaseDmgPacket packet)
+    {
+        Debug.Log("PACKET PROCESSED // DAMAGE = " + packet.damage +  " // HOST " + packet.isHost);
+
+
+        if (packet.isHost)
+        {
+            Debug.Log("HOST SHOULD BE TAKING DAMAGE MF");
+            hostBase.TakeDamage(packet.damage);
+        }
+        else
+        {
+            clientBase.TakeDamage(packet.damage);
+        }
+    }
+
     public void MakeNetObject(GameObject go)
     {
         NetworkObject no = go.AddComponent<NetworkObject>();
@@ -77,7 +101,7 @@ public class ReplicationManager : MonoBehaviour
 
     private IEnumerator SendPlayerPacket()
     {
-       
+
         while (true)
         {
             yield return new WaitForSeconds(0.01f);
@@ -86,7 +110,7 @@ public class ReplicationManager : MonoBehaviour
             PlayerPositionPacket packet = new PlayerPositionPacket(position.x, position.y, 0);
 
             OnlineManager.instance.SendPacket(packet);
-            
+
         }
 
     }

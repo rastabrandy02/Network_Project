@@ -105,7 +105,7 @@ public class Melee_Enemy : MonoBehaviour
             timeSinceLastHit += Time.deltaTime;
             if (timeSinceLastHit >= attackSpeed)
             {
-                collision.gameObject.GetComponent<Player_Base>().TakeDamage(damage);
+                collision.gameObject.GetComponent<Player_Base>().SendDamage(damage);
                 timeSinceLastHit = 0;
             }
         }

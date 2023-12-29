@@ -100,7 +100,7 @@ public class UDP_Server : MonoBehaviour
     {
         if (clientConnected)
         {
-            Debug.Log(_endPoint);
+            //Debug.Log(_endPoint);
           
             _server.Send(data, NetworkPacket.MAX_SIZE, _endPoint);
         }

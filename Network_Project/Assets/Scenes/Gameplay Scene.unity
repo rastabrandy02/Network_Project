@@ -845,17 +845,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8978271874545725975, guid: f068117d3365e7647838c1c4963c614b, type: 3}
   m_PrefabInstance: {fileID: 1694762407}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &908433302 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 895069536796180136, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
-  m_PrefabInstance: {fileID: 581028944338879200}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91976dd8df247c74a95b2ae1cd3bd9f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &930482626 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1780331100965616999, guid: 17ddf558adcba6945ad181d227015076, type: 3}
@@ -945,9 +934,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1690610919}
+      - m_Target: {fileID: 1691819056}
         m_TargetAssemblyTypeName: Player_Base, Assembly-CSharp
-        m_MethodName: TakeDamage
+        m_MethodName: SendDamageHost
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1046,6 +1035,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPlayer: {fileID: 1339846689}
   networkRigidbody: {fileID: 456343266015232416}
+  hostBase: {fileID: 1691819056}
+  clientBase: {fileID: 581028944338879201}
 --- !u!1 &1254910755
 GameObject:
   m_ObjectHideFlags: 0
@@ -6189,17 +6180,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1690610919 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 895069536796180136, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
-  m_PrefabInstance: {fileID: 1691819055}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91976dd8df247c74a95b2ae1cd3bd9f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1691819055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6301,6 +6281,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
+--- !u!114 &1691819056 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 895069536796180136, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
+  m_PrefabInstance: {fileID: 1691819055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91976dd8df247c74a95b2ae1cd3bd9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1694762407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8145,9 +8136,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 908433302}
+      - m_Target: {fileID: 581028944338879201}
         m_TargetAssemblyTypeName: Player_Base, Assembly-CSharp
-        m_MethodName: TakeDamage
+        m_MethodName: SendDamageClient
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8450,6 +8441,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
+--- !u!114 &581028944338879201 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 895069536796180136, guid: 8cd33e8fd1e44b94b89c544b798e5eb5, type: 3}
+  m_PrefabInstance: {fileID: 581028944338879200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91976dd8df247c74a95b2ae1cd3bd9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3452570787029654035
 PrefabInstance:
   m_ObjectHideFlags: 0

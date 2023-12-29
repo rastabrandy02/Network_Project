@@ -110,7 +110,58 @@ public class SpawnPacket : NetworkPacket
 
 }
 
-public class StartGamePacket : NetworkPacket
+public class BaseDmgPacket : NetworkPacket
+{
+    public float damage;
+    public bool isHost;
+
+    public BaseDmgPacket()
+    {
+        type = PacketType.BaseDamage;
+    }
+
+    public BaseDmgPacket(float _damage, bool _isHost)
+    {
+        type = PacketType.BaseDamage;
+
+        damage = _damage;
+        isHost = _isHost;
+    }
+
+    public override byte[] ToByteArray()
+    {
+        byte[] data = base.ToByteArray();
+
+        int offset = 8;
+        
+        BitConverter.GetBytes(damage).CopyTo(data, offset); //the next 4 bytes will be the damage
+        offset += sizeof(float);
+
+        BitConverter.GetBytes(isHost).CopyTo(data, offset); //the next 4 bytes will be the base identifier
+        offset += sizeof(bool);
+
+
+        return data;
+    }
+
+    public override void FromByteArray(byte[] data)
+    {
+        base.FromByteArray(data);
+
+        int offset = 8;
+
+        damage = BitConverter.ToSingle(data, offset); //the next 4 bytes will be the damage
+        offset += sizeof(float);
+
+        isHost = BitConverter.ToBoolean(data, offset); //the next 4 bytes will be the base identifier
+        offset += sizeof(bool);
+
+
+    }
+
+}
+
+    public class StartGamePacket : NetworkPacket
 {
     public StartGamePacket()
     {

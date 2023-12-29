@@ -17,8 +17,6 @@ public class Player_Base : MonoBehaviour
     {
         healthbar.SetHealth(health, maxHealth);
 
-        if (Input.GetKeyDown(KeyCode.R)) TakeDamage(0.1f);
-
         if (health <= 0)
         {
             Die();
@@ -26,10 +24,42 @@ public class Player_Base : MonoBehaviour
 
 
     }
+      
+    public void SendDamage(float damage)
+    {        
+        health -= damage;
+        
+        BaseDmgPacket packet = new BaseDmgPacket();
+        packet.damage = damage;
+        OnlineManager.instance.SendPacket(packet);
+    }
+   
+    public void SendDamageHost(float damage)
+    {
+        health -= damage;
+
+        Debug.Log("Checking if BaseDMG is being SENT");
+        BaseDmgPacket packet = new BaseDmgPacket();
+        packet.damage = damage;
+        packet.isHost = true;
+        OnlineManager.instance.SendPacket(packet);
+    }
+
+    public void SendDamageClient(float damage)
+    {
+        health -= damage;
+
+        BaseDmgPacket packet = new BaseDmgPacket();
+        packet.damage = damage;
+        packet.isHost = false;
+        OnlineManager.instance.SendPacket(packet);
+    }
+
     public void TakeDamage(float damage)
     {
         health -= damage;
     }
+
     void Die()
     {
         Debug.Log("Base destroyed!");
