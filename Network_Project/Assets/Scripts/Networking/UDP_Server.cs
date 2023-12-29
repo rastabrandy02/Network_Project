@@ -78,6 +78,7 @@ public class UDP_Server : MonoBehaviour
             {
                 _endPoint = state.EndPoint;
                 clientConnected = true;
+                Debug.Log(_endPoint.ToString());
                 SendPacket(state.Data);
             }
             
@@ -99,8 +100,8 @@ public class UDP_Server : MonoBehaviour
     {
         if (clientConnected)
         {
-            Debug.Log("Send poquet");
-            
+            Debug.Log(_endPoint);
+          
             _server.Send(data, NetworkPacket.MAX_SIZE, _endPoint);
         }
     }
