@@ -7,6 +7,8 @@ public class Tower_Buying_Platform : MonoBehaviour
     [SerializeField] int towerCost;
     [SerializeField] GameObject tower;
 
+    public Player_Stats player;
+
     bool canSpawn = true;
     void Start()
     {
@@ -44,8 +46,10 @@ public class Tower_Buying_Platform : MonoBehaviour
             return;
         }
 
-        canSpawn = false;
-        Instantiate(tower, transform.position, Quaternion.identity);
+        canSpawn = false;         
+        GameObject go = Instantiate(tower, transform.position, Quaternion.identity);
+        go.GetComponent<Tower>().player_stats = player;
+        
        
 
         Destroy(gameObject);

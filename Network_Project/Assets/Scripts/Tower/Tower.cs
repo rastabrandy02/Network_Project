@@ -15,6 +15,8 @@ public class Tower : MonoBehaviour
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject bullet;
     [SerializeField] LayerMask enemyLayerMask;
+    [SerializeField] bool isHostPlayer;
+    public  Player_Stats player_stats;
 
     float nextAttack;
     GameObject target;
@@ -101,6 +103,7 @@ public class Tower : MonoBehaviour
             nextAttack = Time.time + attackSpeed;
 
             GameObject go = Instantiate(bullet, shootingPoint.position, Quaternion.identity);
+            go.GetComponent<Tower_Bullet>().identity = player_stats;
             if (go == null) Debug.Log("NULL");
             go.GetComponent<Tower_Bullet>().SetBullet(target.transform, damage, bulletSpeed);
         }

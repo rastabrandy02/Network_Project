@@ -10,6 +10,7 @@ public class Tower_Bullet : MonoBehaviour
     float speed;
     float damage;
     Vector2 direction;
+    internal Player_Stats identity;
 
     float timeAlive;
 
@@ -55,7 +56,7 @@ public class Tower_Bullet : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<Melee_Enemy>().TakeDamage(damage);
+            collision.gameObject.GetComponent<Melee_Enemy>().TakeDamage(damage, identity);
         }
         Destroy(gameObject);
     }

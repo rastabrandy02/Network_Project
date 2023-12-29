@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy_Manager : MonoBehaviour
 {
-    
+    [SerializeField] Player_Stats player;
     void Start()
     {
         
@@ -16,8 +16,12 @@ public class Enemy_Manager : MonoBehaviour
         
     }
 
-    public void EnemyDead(int enemyValue, Player_Stats player)
+    public void EnemyDead(int enemyValue, Player_Stats _player)
     {
-        player.GiveCoins(enemyValue);
+       if (player == _player)
+        {
+            _player.GiveCoins(enemyValue);
+
+        }
     }
 }

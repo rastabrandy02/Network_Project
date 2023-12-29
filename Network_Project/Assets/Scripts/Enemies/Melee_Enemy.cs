@@ -11,7 +11,7 @@ public class Melee_Enemy : MonoBehaviour
     [SerializeField] protected float minDistanceToTarget;
     [SerializeField] protected float attackSpeed;
     [SerializeField] protected float damage;
-    [SerializeField] protected int enemyValue;    
+    [SerializeField] protected int enemyValue;
 
     protected Player_Stats targetPlayer;
     protected Enemy_Manager enemyManager;
@@ -34,8 +34,10 @@ public class Melee_Enemy : MonoBehaviour
     protected delegate void State();
     protected State state;
 
+    private Player_Stats currentPlayer;
+
     void Start()
-    {               
+    {
         rb = GetComponent<Rigidbody2D>();
         healthbar = GetComponentInChildren<Healthbar>();
 
@@ -53,10 +55,6 @@ public class Melee_Enemy : MonoBehaviour
     {
         healthbar.SetHealth(health, maxHealth);
         state();
-        if(health <= 0)
-        {
-            state = Die;
-        }
     }
 
     void FollowPath()
@@ -67,12 +65,14 @@ public class Melee_Enemy : MonoBehaviour
             rb.velocity += direction * acceleration;
         }
     }
+
     void Die()
     {
         isAlive = false;
-        enemyManager.EnemyDead(enemyValue, targetPlayer);
+        enemyManager.EnemyDead(enemyValue, currentPlayer);
         Destroy(gameObject);
     }
+
     IEnumerator CheckDistance()
     {
         while(isAlive)
@@ -123,9 +123,15 @@ public class Melee_Enemy : MonoBehaviour
     {
         enemyManager = manager;
     }
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Player_Stats player)
     {
         health-=damage;
+
+        if (health <= 0) 
+        {
+            currentPlayer = player;
+            state = Die;
+        }
     }
     public float GetHealth()
     {

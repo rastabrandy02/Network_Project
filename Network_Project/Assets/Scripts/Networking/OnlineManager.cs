@@ -8,33 +8,27 @@ public class OnlineManager : MonoBehaviour
 
     public GameObject localPlayer;
     public GameObject networkPlayer;
-    
+
     private UDP_Client _client;
     private UDP_Server _server;
-    private Rigidbody2D networkRigidbody; 
+    private Rigidbody2D networkRigidbody;
 
     public Transform serverSpawn;
     public Transform clientSpawn;
 
     public GameObject[] tower_Client = new GameObject[3];
     public GameObject[] tower_Host = new GameObject[3];
+
+    public Tower initialTowerHost;
+    public Tower initialTowerClient;
     private void Awake()
     {
-        instance = this; 
+        instance = this;
     }
 
     void Start()
     {
-        for (int i = 0; i < tower_Client.Length; i++)
-        {
-            tower_Client[i].name = "TClient_" + i;
-        }
-
-        for (int i = 0; i < tower_Host.Length; i++)
-        {
-            tower_Host[i].name = "THost_" + i;
-        }
-
+        SetUpTowers();
 
         networkRigidbody = networkPlayer.GetComponent<Rigidbody2D>();
         ReplicationManager.instance.networkRigidbody = networkRigidbody;
@@ -56,18 +50,65 @@ public class OnlineManager : MonoBehaviour
             networkPlayer.transform.position = clientSpawn.position;
             localPlayer.transform.position = serverSpawn.position;
         }
-        
+
         StartCoroutine(SendPackets());
+    }
+
+    private void SetUpTowers()
+    {
+        for (int i = 0; i < tower_Client.Length; i++)
+        {
+            tower_Client[i].name = "TClient_" + i;
+            if (NetworkData.ConnectionType == ConnectionType.Client)
+            {
+                tower_Client[i].GetComponent<Tower_Buying_Platform>().player = localPlayer.GetComponent<Player_Stats>();
+            }
+            else
+            {
+                tower_Client[i].GetComponent<Tower_Buying_Platform>().player = networkPlayer.GetComponent<Player_Stats>();
+            }
+        }
+
+        for (int i = 0; i < tower_Host.Length; i++)
+        {
+            tower_Host[i].name = "THost_" + i;
+            if (NetworkData.ConnectionType == ConnectionType.Server)
+            {
+                tower_Host[i].GetComponent<Tower_Buying_Platform>().player = localPlayer.GetComponent<Player_Stats>();
+            }
+            else
+            {
+                tower_Host[i].GetComponent<Tower_Buying_Platform>().player = networkPlayer.GetComponent<Player_Stats>();
+            }
+        }
+
+        if (NetworkData.ConnectionType == ConnectionType.Client)
+        {
+            initialTowerClient.GetComponent<Tower>().player_stats = localPlayer.GetComponent<Player_Stats>();
+        }
+        else
+        {
+            initialTowerClient.GetComponent<Tower>().player_stats = networkPlayer.GetComponent<Player_Stats>();
+        }
+
+        if (NetworkData.ConnectionType == ConnectionType.Server)
+        {
+            initialTowerHost.GetComponent<Tower>().player_stats = localPlayer.GetComponent<Player_Stats>();
+        }
+        else
+        {
+            initialTowerHost.GetComponent<Tower>().player_stats = networkPlayer.GetComponent<Player_Stats>();
+        }
     }
 
 
     // Update is called once per frame
     void Update()
     {
-       
-    }   
 
-    
+    }
+
+
     private void OnPacketRecieved(NetworkPacket packet)
     {
         Debug.Log("Packet Recieved");
@@ -105,10 +146,10 @@ public class OnlineManager : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
 
-                 
+
         }
 
-       
+
 
     }
 }
