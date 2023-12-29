@@ -45,7 +45,7 @@ public class UDP_Client : MonoBehaviour
         _socket = new UdpClient(_port);
         _socket.Connect(NetworkData.ServerAddress, NetworkData.Port);
         buffer = new byte[NetworkPacket.MAX_SIZE];
-
+        Debug.Log(_socket.Client.LocalEndPoint);
         _socket.BeginReceive(new AsyncCallback(RecieveCallback), null);
     }
 
@@ -53,7 +53,7 @@ public class UDP_Client : MonoBehaviour
     void RecieveCallback(IAsyncResult AR)
     {
         buffer = _socket.EndReceive(AR, ref _endPoint);
-
+        Debug.Log("Gaychi");
 
 
         NetworkPacket packet = NetworkPacket.ParsePacket(buffer);
@@ -68,7 +68,7 @@ public class UDP_Client : MonoBehaviour
 
     public void SendPacket(byte[] data)
     {
-        _socket.Send(data, NetworkPacket.MAX_SIZE, _endPoint);
+        _socket.Send(data, NetworkPacket.MAX_SIZE);
     }
 
 
