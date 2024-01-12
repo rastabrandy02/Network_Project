@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player_Base : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class Player_Base : MonoBehaviour
 
 
     }
+
+
       
     public void SendDamage(float damage)
     {        
@@ -64,5 +67,6 @@ public class Player_Base : MonoBehaviour
     {
         Debug.Log("Base destroyed!");
         Destroy(gameObject);
+        SceneManager.LoadScene("GameOver");
     }
 }
