@@ -38,7 +38,10 @@ public class ReplicationManager : MonoBehaviour
 
     private void ProcessPlayerPos(PlayerPositionPacket packet)
     {
-        networkRigidbody.MovePosition(new Vector2(packet.x, packet.y));
+        if (networkRigidbody.velocity == Vector2.zero)
+        {
+            networkRigidbody.MovePosition(new Vector2(packet.x, packet.y));
+        }
         //Debug.Log("X: " + packet.x + "Y: " + packet.y);
     }
 
@@ -60,6 +63,11 @@ public class ReplicationManager : MonoBehaviour
             case PacketType.BaseDamage:
                 {
                     ProcessBaseDmg((BaseDmgPacket)packet);
+                }
+                break;
+            case PacketType.PlayerMovement:
+                {
+                    ProcessPlayerMovement((PlayerMovementPacket)packet);
                 }
                 break;
         }
@@ -93,7 +101,12 @@ public class ReplicationManager : MonoBehaviour
         }
     }
 
-    public void MakeNetObject(GameObject go)
+    private void ProcessPlayerMovement(PlayerMovementPacket packet)
+    {
+        networkRigidbody.velocity += packet.direction;
+    }
+
+        public void MakeNetObject(GameObject go)
     {
         NetworkObject no = go.AddComponent<NetworkObject>();
         netObjects.Add(no);
@@ -101,7 +114,6 @@ public class ReplicationManager : MonoBehaviour
 
     private IEnumerator SendPlayerPacket()
     {
-
         while (true)
         {
             yield return new WaitForSeconds(0.01f);
@@ -112,7 +124,6 @@ public class ReplicationManager : MonoBehaviour
             OnlineManager.instance.SendPacket(packet);
 
         }
-
     }
 }
 

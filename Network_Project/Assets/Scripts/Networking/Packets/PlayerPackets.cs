@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+
 
 public class PlayerPositionPacket : NetworkPacket
 {
@@ -53,7 +55,25 @@ public class PlayerPositionPacket : NetworkPacket
     }
 }
 
-public enum SpawnType : int
+public class PlayerMovementPacket : NetworkPacket
+{
+    public Vector2 direction;
+
+    public PlayerMovementPacket()
+    {
+        type = PacketType.PlayerMovement;
+    }
+
+    public PlayerMovementPacket(Vector2 _direction)
+    {
+        type = PacketType.PlayerMovement;
+
+        direction = _direction;
+    }
+}
+
+
+    public enum SpawnType : int
 {
     Turret,
     Enemy,
@@ -176,5 +196,7 @@ public class BaseDmgPacket : NetworkPacket
             type = PacketType.Hello;
         }
     }
+
+
 
 //I drive - Ryan Gosling (me)

@@ -13,6 +13,7 @@ public class Player_Movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        StartCoroutine(SendMovement());
     }
 
     void Update()
@@ -38,14 +39,26 @@ public class Player_Movement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Move(movVec);       
+        Move(movVec);
     }
 
     void Move(Vector2 movement)
     {
         if (rb.velocity.magnitude >= maxSpeed) return;
-                       
-        rb.velocity += movement;              
+
+        rb.velocity += movement;
     }
-   
+
+    IEnumerator SendMovement()
+    {
+        while (true)
+        {
+            PlayerMovementPacket packet = new PlayerMovementPacket();
+            packet.direction = movVec;
+            OnlineManager.instance.SendPacket(packet);
+
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+
 }

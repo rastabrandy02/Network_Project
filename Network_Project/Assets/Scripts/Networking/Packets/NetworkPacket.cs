@@ -6,6 +6,7 @@ public enum PacketType : int
     Hello,
     Spawn,
     BaseDamage,
+    PlayerMovement,
 }
 
 
@@ -72,6 +73,12 @@ public class NetworkPacket
             case PacketType.BaseDamage:
                 {
                     packet = new BaseDmgPacket();
+                    packet.FromByteArray(data);
+                    return packet;
+                }
+            case PacketType.PlayerMovement:
+                {
+                    packet = new PlayerMovementPacket();
                     packet.FromByteArray(data);
                     return packet;
                 }

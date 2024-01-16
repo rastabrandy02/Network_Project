@@ -27,16 +27,16 @@ public class Player_Base : MonoBehaviour
     }
 
 
-      
+
     public void SendDamage(float damage)
-    {        
+    {
         health -= damage;
-        
+
         BaseDmgPacket packet = new BaseDmgPacket();
         packet.damage = damage;
         OnlineManager.instance.SendPacket(packet);
     }
-   
+
     public void SendDamageHost(float damage)
     {
         health -= damage;
