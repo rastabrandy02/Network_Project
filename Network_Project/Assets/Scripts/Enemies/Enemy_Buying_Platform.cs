@@ -21,12 +21,12 @@ public class Enemy_Buying_Platform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!canSpawn)
+        if (!canSpawn)
         {
             timeSinceLastSpawn += Time.deltaTime;
-            if(timeSinceLastSpawn >= platformCoolDown) 
-            {             
-                canSpawn = true;                
+            if (timeSinceLastSpawn >= platformCoolDown)
+            {
+                canSpawn = true;
             }
         }
         cooldownIndicator.SetHealth(timeSinceLastSpawn, platformCoolDown);
@@ -34,19 +34,23 @@ public class Enemy_Buying_Platform : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {          
-            if (Input.GetKey(KeyCode.E) && canSpawn)
-            {              
-                if(collision.gameObject.GetComponent<Player_Stats>().SpendCoins(enemyCost))
+        if (NetworkData.ConnectionType == ConnectionType.Client && gameObject.name == "C_EnemyBuyingPlatform" ||
+            NetworkData.ConnectionType == ConnectionType.Server && gameObject.name == "H_EnemyBuyingPlatform")
+        {
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                if (Input.GetKey(KeyCode.E) && canSpawn)
                 {
-                    targetSpawner.SpawnSiegeEnemy();
-                    timeSinceLastSpawn = 0;
-                    canSpawn = false;
+                    if (collision.gameObject.GetComponent<Player_Stats>().SpendCoins(enemyCost))
+                    {
+                        targetSpawner.SpawnSiegeEnemy();
+                        timeSinceLastSpawn = 0;
+                        canSpawn = false;
+                    }
+
                 }
-                
             }
         }
     }
-    
+
 }

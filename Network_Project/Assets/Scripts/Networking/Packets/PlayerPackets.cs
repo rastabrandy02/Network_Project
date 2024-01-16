@@ -79,22 +79,24 @@ public class PlayerMovementPacket : NetworkPacket
     Enemy,
 }
 
-public class SpawnPacket : NetworkPacket
+public class SpawnTowerPacket : NetworkPacket
 {
     public SpawnType spawn;
     public int tower_id;
-    public SpawnPacket()
+    public SpawnTowerPacket()
     {
-        type = PacketType.Spawn;
+        type = PacketType.SpawnTower;
     }
 
-    public SpawnPacket(SpawnType _spawn, int _tower_id)
+    public SpawnTowerPacket(SpawnType _spawn, int _tower_id)
     {
-        type = PacketType.Spawn;
+        type = PacketType.SpawnTower;
 
         spawn = _spawn;
         tower_id = _tower_id;
     }
+
+
 
     public override byte[] ToByteArray()
     {
@@ -128,6 +130,14 @@ public class SpawnPacket : NetworkPacket
        
     }
 
+}
+
+public class SpawnEnemyPacket : NetworkPacket
+{    
+    public SpawnEnemyPacket()
+    {
+        type = PacketType.SpawnEnemy;
+    }
 }
 
 public class BaseDmgPacket : NetworkPacket

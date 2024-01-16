@@ -4,7 +4,8 @@ public enum PacketType : int
     StartGame,
     PlayerPosition,
     Hello,
-    Spawn,
+    SpawnTower,
+    SpawnEnemy,
     BaseDamage,
     PlayerMovement,
 }
@@ -64,9 +65,15 @@ public class NetworkPacket
                     packet.FromByteArray(data);
                     return packet;
                 }
-            case PacketType.Spawn:
+            case PacketType.SpawnTower:
                 {
-                    packet = new SpawnPacket();
+                    packet = new SpawnTowerPacket();
+                    packet.FromByteArray(data);
+                    return packet;
+                }
+            case PacketType.SpawnEnemy:
+                {
+                    packet = new SpawnEnemyPacket();
                     packet.FromByteArray(data);
                     return packet;
                 }

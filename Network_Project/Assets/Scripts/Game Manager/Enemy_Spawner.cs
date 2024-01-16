@@ -66,5 +66,17 @@ public class Enemy_Spawner : MonoBehaviour
         meleeEnemy.SetPath(pathPoints);
         meleeEnemy.SetTargetPlayer(targetPlayer);
         meleeEnemy.SetManager(enemyManager);
+
+        SpawnEnemyPacket packet = new SpawnEnemyPacket();
+        OnlineManager.instance.SendPacket(packet);
+    }
+
+    public void SpawnSiegeEnemyOpponent()
+    {
+        GameObject go = Instantiate(this.siegeEnemy, transform.position, Quaternion.identity);
+        Melee_Enemy meleeEnemy = go.GetComponent<Melee_Enemy>();
+        meleeEnemy.SetPath(pathPoints);
+        meleeEnemy.SetTargetPlayer(targetPlayer);
+        meleeEnemy.SetManager(enemyManager);
     }
 }

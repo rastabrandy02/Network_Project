@@ -32,7 +32,7 @@ public class Tower_Buying_Platform : MonoBehaviour
                 {
                     if (_player_stats.SpendCoins(towerCost))
                     {
-                        SpawnPacket packet = new SpawnPacket();
+                        SpawnTowerPacket packet = new SpawnTowerPacket();
                         packet.tower_id = int.Parse(name.Split('_')[1]);
                         OnlineManager.instance.SendPacket(packet);
                         Spawn();

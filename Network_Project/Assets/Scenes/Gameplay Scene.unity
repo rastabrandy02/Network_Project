@@ -193,7 +193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209297375970995991, guid: fae70132128f68a4384b2326f1f70c54, type: 3}
       propertyPath: m_Name
-      value: Enemy Buying Platform (1)
+      value: H_EnemyBuyingPlatform
       objectReference: {fileID: 0}
     - target: {fileID: 8861867211050224312, guid: fae70132128f68a4384b2326f1f70c54, type: 3}
       propertyPath: targetSpawner
@@ -289,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4988010615751794947, guid: 21602dae00863ba46962396f27ac1ce0, type: 3}
       propertyPath: m_Name
-      value: Enemy Spawner (1)
+      value: H_EnemySpawner
       objectReference: {fileID: 0}
     - target: {fileID: 7907975513826594422, guid: 21602dae00863ba46962396f27ac1ce0, type: 3}
       propertyPath: canSpawn
@@ -8904,7 +8904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5209297375970995991, guid: fae70132128f68a4384b2326f1f70c54, type: 3}
       propertyPath: m_Name
-      value: Enemy Buying Platform
+      value: C_EnemyBuyingPlatform
       objectReference: {fileID: 0}
     - target: {fileID: 8861867211050224312, guid: fae70132128f68a4384b2326f1f70c54, type: 3}
       propertyPath: targetSpawner
@@ -8969,7 +8969,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4988010615751794947, guid: 21602dae00863ba46962396f27ac1ce0, type: 3}
       propertyPath: m_Name
-      value: Enemy Spawner
+      value: C_EnemySpawner
       objectReference: {fileID: 0}
     - target: {fileID: 7907975513826594422, guid: 21602dae00863ba46962396f27ac1ce0, type: 3}
       propertyPath: canSpawn

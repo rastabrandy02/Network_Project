@@ -55,9 +55,14 @@ public class ReplicationManager : MonoBehaviour
                     ProcessPlayerPos((PlayerPositionPacket)packet);
                 }
                 break;
-            case PacketType.Spawn:
+            case PacketType.SpawnTower:
                 {
-                    ProcessSpawn((SpawnPacket)packet);
+                    ProcessSpawnTurret((SpawnTowerPacket)packet);
+                }
+                break;
+            case PacketType.SpawnEnemy:
+                {
+                    ProcessSpawnEnemy((SpawnEnemyPacket)packet);
                 }
                 break;
             case PacketType.BaseDamage:
@@ -73,7 +78,7 @@ public class ReplicationManager : MonoBehaviour
         }
     }
 
-    private void ProcessSpawn(SpawnPacket packet)
+    private void ProcessSpawnTurret(SpawnTowerPacket packet)
     {
         if (NetworkData.ConnectionType == ConnectionType.Client)
         {
@@ -85,7 +90,22 @@ public class ReplicationManager : MonoBehaviour
         }
     }
 
-    private void ProcessBaseDmg(BaseDmgPacket packet)
+    private void ProcessSpawnEnemy(SpawnEnemyPacket packet)
+    {
+        string name = "";
+        if (NetworkData.ConnectionType == ConnectionType.Client)
+        {
+            name = "C_EnemySpawner";
+        }
+        else
+        {
+            name = "H_EnemySpawner";
+        }
+
+            GameObject.Find(name).GetComponent<Enemy_Spawner>().SpawnSiegeEnemyOpponent();
+    }
+
+        private void ProcessBaseDmg(BaseDmgPacket packet)
     {
         Debug.Log("PACKET PROCESSED // DAMAGE = " + packet.damage +  " // HOST " + packet.isHost);
 

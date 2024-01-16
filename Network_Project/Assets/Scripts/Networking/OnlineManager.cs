@@ -39,6 +39,7 @@ public class OnlineManager : MonoBehaviour
             var client = gameObject.AddComponent<UDP_Client>();
             client.OnPacketRecieved += OnPacketRecieved;
             _client = client;
+
             localPlayer.transform.position = clientSpawn.position;
             networkPlayer.transform.position = serverSpawn.position;
         }

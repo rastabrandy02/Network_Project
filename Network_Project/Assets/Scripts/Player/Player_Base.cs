@@ -22,10 +22,7 @@ public class Player_Base : MonoBehaviour
         {
             Die();
         }
-
-
     }
-
 
 
     public void SendDamage(float damage)
