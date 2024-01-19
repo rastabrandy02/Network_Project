@@ -8,7 +8,11 @@ public class Player_Base : MonoBehaviour
     [SerializeField] float maxHealth;
     [SerializeField] Healthbar healthbar;
 
+    public Player_Stats player;
+    public bool isHost;
+
     float health;
+    public bool isDead = false;
     void Start()
     {
         health = maxHealth;
@@ -63,7 +67,9 @@ public class Player_Base : MonoBehaviour
     void Die()
     {
         Debug.Log("Base destroyed!");
+        isDead = true;
+        OnlineManager.instance.ShowGameOver();
+        
         Destroy(gameObject);
-        SceneManager.LoadScene("GameOver");
     }
 }

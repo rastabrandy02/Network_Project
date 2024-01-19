@@ -21,6 +21,12 @@ public class OnlineManager : MonoBehaviour
 
     public Tower initialTowerHost;
     public Tower initialTowerClient;
+
+    public Player_Base clientBase;
+    public Player_Base serverBase;
+
+    [SerializeField] GameObject youWinScreen;
+    [SerializeField] GameObject youLoseScreen;
     private void Awake()
     {
         instance = this;
@@ -29,6 +35,9 @@ public class OnlineManager : MonoBehaviour
     void Start()
     {
         SetUpTowers();
+        SetUpBases();
+        youLoseScreen.SetActive(false);
+        youWinScreen.SetActive(false);
 
         networkRigidbody = networkPlayer.GetComponent<Rigidbody2D>();
         ReplicationManager.instance.networkRigidbody = networkRigidbody;
@@ -99,6 +108,29 @@ public class OnlineManager : MonoBehaviour
         else
         {
             initialTowerHost.GetComponent<Tower>().player_stats = networkPlayer.GetComponent<Player_Stats>();
+        }
+    }
+
+    private void SetUpBases()
+    {
+        clientBase.GetComponent<Player_Base>().player = localPlayer.GetComponent<Player_Stats>();
+        clientBase.GetComponent<Player_Base>().isHost = false;
+
+        serverBase.GetComponent<Player_Base>().player = networkPlayer.GetComponent<Player_Stats>();
+        clientBase.GetComponent<Player_Base>().isHost = true;
+    }
+
+    public void ShowGameOver()
+    {
+        if (clientBase.isDead == true)
+        {
+            if(NetworkData.ConnectionType == ConnectionType.Client) youLoseScreen.SetActive(true);
+            else if (NetworkData.ConnectionType == ConnectionType.Server) youWinScreen.SetActive(true);
+        }
+        else if (serverBase.isDead == true)
+        {
+            if (NetworkData.ConnectionType == ConnectionType.Server) youLoseScreen.SetActive(true);
+            else if (NetworkData.ConnectionType == ConnectionType.Client) youWinScreen.SetActive(true);
         }
     }
 
