@@ -32,17 +32,14 @@ public class Player_Base : MonoBehaviour
     public void SendDamage(float damage)
     {
         health -= damage;
-
-        BaseDmgPacket packet = new BaseDmgPacket();
-        packet.damage = damage;
-        OnlineManager.instance.SendPacket(packet);
+        //if (isHost) SendDamageHost(damage);
+        //else SendDamageClient(damage);
     }
 
     public void SendDamageHost(float damage)
     {
         health -= damage;
-
-        Debug.Log("Checking if BaseDMG is being SENT");
+        
         BaseDmgPacket packet = new BaseDmgPacket();
         packet.damage = damage;
         packet.isHost = true;

@@ -117,6 +117,7 @@ public class ReplicationManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("CLIENT SHOULD BE TAKING DAMAGE HOE");
             clientBase.TakeDamage(packet.damage);
         }
     }

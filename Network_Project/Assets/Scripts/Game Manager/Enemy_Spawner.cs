@@ -18,7 +18,6 @@ public class Enemy_Spawner : MonoBehaviour
     float nextSpawn;
     int currentWave;
     int numberOfEnemiesToSpawn;
-
     
 
     void Start()

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4415976567165513119}
   - component: {fileID: 755000407425458038}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8030830333625666480}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 1807266134630773046}
   - component: {fileID: 654751944845740731}
   - component: {fileID: 1830867966886428560}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 5133145332617028884}
   - component: {fileID: 8938581537045109907}
   - component: {fileID: 4123114375169016485}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 1172772966036480871}
   - component: {fileID: 4393596876241677735}
   - component: {fileID: 125189118762952275}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Healthbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -409,7 +409,7 @@ GameObject:
   - component: {fileID: 1736597467291527809}
   - component: {fileID: 8509419464181998712}
   - component: {fileID: 895069536796180136}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Base
   m_TagString: Base
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ Transform:
   m_Children:
   - {fileID: 5600920602030235664}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1736597467291527809
 SpriteRenderer:
@@ -473,12 +473,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
+  m_Sprite: {fileID: 5133694766355285195, guid: f0691452c80653243a9746f80d776871, type: 3}
   m_Color: {r: 0.31764707, g: 0.61960787, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.8828125}
+  m_Size: {x: 0.34, y: 0.34}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -492,7 +492,6 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6905889677792122718}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -516,10 +515,10 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  serializedVersion: 2
+  m_Radius: 0.22
 --- !u!114 &895069536796180136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,5 +531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91976dd8df247c74a95b2ae1cd3bd9f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 15
   healthbar: {fileID: 125189118762952275}
+  player: {fileID: 0}
+  isHost: 0
+  isDead: 0

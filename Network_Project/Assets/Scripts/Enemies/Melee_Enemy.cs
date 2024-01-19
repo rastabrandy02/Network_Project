@@ -42,7 +42,7 @@ public class Melee_Enemy : MonoBehaviour
         healthbar = GetComponentInChildren<Healthbar>();
 
         health = maxHealth;
-        state = FollowPath;      
+        state = FollowPath;
         pathTarget = pathPoints[pathPointIndex];
         lastPos = transform.position;
 
@@ -50,7 +50,7 @@ public class Melee_Enemy : MonoBehaviour
         StartCoroutine(UpdateTraveledDistance());
     }
 
-    
+
     void FixedUpdate()
     {
         healthbar.SetHealth(health, maxHealth);
@@ -59,7 +59,7 @@ public class Melee_Enemy : MonoBehaviour
 
     void FollowPath()
     {
-        if(rb.velocity.magnitude < maxSpeed)
+        if (rb.velocity.magnitude < maxSpeed)
         {
             Vector2 direction = (pathTarget.position - transform.position).normalized;
             rb.velocity += direction * acceleration;
@@ -75,7 +75,7 @@ public class Melee_Enemy : MonoBehaviour
 
     IEnumerator CheckDistance()
     {
-        while(isAlive)
+        while (isAlive)
         {
             if (Vector2.Distance(transform.position, pathTarget.position) < minDistanceToTarget)
             {
@@ -86,28 +86,24 @@ public class Melee_Enemy : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
-        
+
     }
     IEnumerator UpdateTraveledDistance()
     {
-        while(isAlive) 
+        while (isAlive)
         {
             distanceTraveled += Vector2.Distance(transform.position, lastPos);
             lastPos = transform.position;
             yield return new WaitForSeconds(0.1f);
-        
+
         }
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Base"))
         {
-            timeSinceLastHit += Time.deltaTime;
-            if (timeSinceLastHit >= attackSpeed)
-            {
-                collision.gameObject.GetComponent<Player_Base>().SendDamage(damage);
-                timeSinceLastHit = 0;
-            }
+            collision.gameObject.GetComponent<Player_Base>().SendDamage(damage);
+            TakeDamage(health, currentPlayer);
         }
     }
 
@@ -125,9 +121,9 @@ public class Melee_Enemy : MonoBehaviour
     }
     public void TakeDamage(float damage, Player_Stats player)
     {
-        health-=damage;
+        health -= damage;
 
-        if (health <= 0) 
+        if (health <= 0)
         {
             currentPlayer = player;
             state = Die;
@@ -135,17 +131,17 @@ public class Melee_Enemy : MonoBehaviour
     }
     public float GetHealth()
     {
-        return health; 
+        return health;
     }
     public float GetMaxHealth()
     {
         return maxHealth;
     }
     public float GetDistanceTraveled()
-    { 
-        return distanceTraveled; 
+    {
+        return distanceTraveled;
     }
-    
-   
+
+
 }
 

@@ -120,7 +120,11 @@ public class OnlineManager : MonoBehaviour
         clientBase.GetComponent<Player_Base>().isHost = true;
     }
 
-    public void ShowGameOver()
+    private void SetUpEnemies()
+    {
+    }
+
+        public void ShowGameOver()
     {
         if (clientBase.isDead == true)
         {
